@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rainbow Snake!</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <header class="navbar navbar-default navbar-static-top" id="top" role="banner">
+    <div class="container" style="background-color:#708090">
+      <div class="navbar-header" style="background-color:#708090">
+        <a class="navbar-brand" href="/">
+<div><font size="12"><span style="color:#ff0000;">R</span><span style="color:#ff2a00;">a</span><span style="color:#ff5500;">i</span><span style="color:#ff7f00;">n</span><span style="color:#ffbf00;">b</span><span style="color:#ffff00;">o</span><span style="color:#aaff00;">w</span><span style="color:#55ff00;"> </span><span style="color:#00ff00;">S</span><span style="color:#00ff80;">n</span><span style="color:#00ffff;">a</span><span style="color:#00ffff;">k</span><span style="color:#00ffff;">e</span><span style="color:#0000ff;">!</font></span></div>
+        </a>
+          <a href="#messaging"><font color="#fff">&raquo; Messaging</font></a><br>
+          <a href="#senors"><font color="#fff">&raquo; Sensors</font></a><br>
+          <a href="#"><font color="#fff">&raquo; <span id="apname">::</span></font></a>
+      </div>
+    </div>
+  </header>
+  <div class="container">
+    <form class="form-horizontal">
+      <div class="form-group">
+        <div class="col-sm-1 col-sm-offset-2">
+          <button type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-refresh" id="btnRefresh"></span>
+          </button>
+        </div>
+        <div class="col-sm-4">
+          <p id="status" class="form-control-static">Status</p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Power</label>
+        <div class="col-sm-6">
+          <div class="btn-group" role="group" aria-label="Power">
+            <button type="button" class="btn btn-default" id="btnPowerOn">On</button>
+            <button type="button" class="btn btn-default" id="btnPowerOff">Off</button>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="inputBrightness" class="col-sm-2 control-label">Brightness</label>
+        <div class="col-sm-6">
+          <div class="input-group">
+            <span class="input-group-addon" id="spanBrightness">128</span>
+            <input class="form-control" id="inputBrightness" type="range" step="1" min="0" max="255" />
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="inputPattern" class="col-sm-2 control-label">Pattern</label>
+        <div class="col-sm-6">
+          <select class="form-control" id="inputPattern">
+            <option>Rainbow</option>
+            <option>Sinelon</option>
+            <option>Juggle</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="inputColor" class="col-sm-2 control-label">Color</label>
+        <div class="col-sm-6">
+          <input id="inputColor" type="text" class="form-control">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-6 col-sm-offset-2">
+          <div class="btn-group btn-group-justified" role="group">
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-default btn-color" style="background: #FF0000;" title="Red">&nbsp;</button>
+            </div>
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-default btn-color" style="background: #FF8000;" title="Orange">&nbsp;</button>
+            </div>
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-default btn-color" style="background: #FFFF00;" title="Yellow">&nbsp;</button>
+            </div>
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-default btn-color" style="background: #80FF00;" title="Chartreuse">&nbsp;</button>
+              </div>
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-default btn-color" style="background: #00FF00;" title="Green">&nbsp;</button>
+              </div>
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-default btn-color" style="background: #00FF80;" title="Spring Green">&nbsp;</button>
+              </div>
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-default btn-color" style="background: #00FFFF;" title="Cyan">&nbsp;</button>
+              </div>
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-default btn-color" style="background: #0080FF;" title="Azure">&nbsp;</button>
+              </div>
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-default btn-color" style="background: #0000FF;" title="Blue">&nbsp;</button>
+              </div>
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-default btn-color" style="background: #8000FF;" title="Violet">&nbsp;</button>
+              </div>
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-default btn-color" style="background: #FF00FF;" title="Magenta">&nbsp;</button>
+              </div>
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-default btn-color" style="background: #FF0080;" title="Rose">&nbsp;</button>
+              </div>
+          </div>
+
+          <!-- Size -->
+          <div class="form-group">
+            <label class="col-sm-2 control-label">size</label>
+            <div class="col-sm-6">
+              <input type="text" id="sizeInput"></input>
+            </div>
+            <button type="button" onclick="updateSize()">Update</button>
+          </div>
+
+          <!-- Size -->
+          <div class="form-group">
+            <label class="col-sm-2 control-label">bpm</label>
+            <div class="col-sm-6">
+              <input type="text" id="bpmInput"></input>
+            </div>
+            <button type="button" onclick="updateBpm()">Update</button>
+          </div>
+
+          <!-- Messaging -->
+          <div class="form-group" id="messaging">
+            <label class="col-sm-2 control-label">Chat</label>
+            <div class="col-sm-6" id="messageArea">
+
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Message</label>
+            <div class="col-sm-6">
+              <input type="text" id="message" style="width:300px" />
+              <button type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-send" id="btnSend"></btnMessage>
+              </button>
+            </div>
+          </div>
+          <!-- End messaging -->
+          <!-- Mobile Sensors -->
+
+          <div class="form-group" id="senors">
+            <label class="col-sm-2 control-label">Mobile Sensors</label>
+            <div class="col-sm-6">
+              <div>
+              <pre style="width:200; height:45; background-color:#CCCCCC" id="latLongConsole">
+              </pre>
+              <pre style="width:200; height:100; background-color:#EEEEEE" id="gyroConsole">
+              </pre>
+
+              <pre stye="width:100; height:20;" id="headingConsole"></pre>
+              <!--
+              <img id="compass-image" src="images/compass.png" />
+              -->
+              <pre id="console"></pre>
+            </div>
+          </div>
+          <!-- End mobile sensors -->
+        </div>
+      </div>
+    </form>
+  </div>
+    <!-- start gguuss code -->
+    <!-- Additions from for enabling sensors access to phone -->
+
+    <script>
+    // Boilderplate code from W3Schools
+    function updateGeo() {
+      navigator.geolocation.getCurrentPosition(function(location) {
+        document.getElementById('latLongConsole').innerText =
+          'lat: ' + location.coords.latitude + '\n' +
+          'long: ' + location.coords.longitude + '\n' +
+          'accuracy: ' +location.coords.accuracy;
+
+        console.log(location.coords.latitude);
+        console.log(location.coords.longitude);
+        console.log(location.coords.accuracy);
+      });
+    }
+
+    var onOrientationChange = function() {
+      var isPortrait = window.orientation % 180 === 0;
+      document.body.className = isPortrait ? 'portrait' : 'landscape';
+    }
+
+    window.addEventListener('orientationchange', onOrientationChange, false);
+    onOrientationChange();
+
+    /*
+    var compassElem = document.getElementById('compass-image');
+    handleCompassEvent = function(e) {
+        var compassHeading = e.webkitCompassHeading;
+        if (!compassHeading) {
+          compassHeading = event.alpha;
+          if(!window.chrome) {
+            compassHeading = compassHeading;
+          }
+        }
+        document.getElementById('headingConsole').innerText = compassHeading;
+        compassElem.style.webkitTransform = 'rotate(' + (-compassHeading) + 'deg)';
+    };
+    window.addEventListener('deviceorientation', handleCompassEvent, false);
+    */
+
+    handleOrientationEvent = function(e) {
+        var alpha = e.alpha,
+            beta = e.beta,
+            gamma = e.gamma;
+        document.getElementById('gyroConsole').innerText =
+          'Alpha: ' + alpha + '\n' +
+          'Beta: ' + beta + '\n' +
+          'Gamma: ' + gamma + '\n';
+    };
+
+    window.addEventListener('deviceorientation', handleOrientationEvent, false);
+    </script>
+  </div>
+  <!-- end gguuss code -->
+  <script src="js/scripts.js"></script>
+</body>
+</html>
