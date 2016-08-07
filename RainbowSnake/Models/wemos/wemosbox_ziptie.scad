@@ -15,9 +15,9 @@ zipTieSize = 8;
 zipTieOffset = 13;
 
 // parts
-drawHead = false;
+drawHead = true;
 drawTinyHead = false;
-drawFoot = true;
+drawFoot = false;
 
 if (drawHead) {
   
@@ -50,10 +50,10 @@ if (drawHead) {
 
 
     // keep pins
-    translate([outerX - 9, outerY / 2 - 6, 12]) 
-      cube([5, 12, outerZ - 15]);
-    translate([1, outerY / 2 - 6, 19]) 
-      cube([5, 12, outerZ - 20]);
+    translate([outerX - 9, outerY / 2 - 6, 14]) 
+      cube([5, 12, outerZ - 13]);
+    translate([1, outerY / 2 - 6, 17]) 
+      cube([5, 12, outerZ - 18]);
   }
 }
 

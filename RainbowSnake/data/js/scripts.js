@@ -158,10 +158,6 @@ function updateMessage(value) {
                 messages[i] + "</font></td></tr>";
         } else {
             html += '<tr style="background-color:#FFF"><td>' + messages[i] + "</td></tr>";
-            html += '<tr style="background-color:#0080FF"><td><font color="white">' +
-                messages[i] + "</font></td></tr>";
-        } else {
-            html += '<tr style="background-color:#FFF"><td>' + messages[i] + "</td></tr>";
         }
     }
     html += "</table>";
