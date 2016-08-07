@@ -109,7 +109,6 @@ function updateBpm() {
   });
 }
 
-
 function getAll() {
   $.get(urlBase + "all", function(data) {
     allData = data;
@@ -155,6 +154,10 @@ function updateMessage(value) {
     var html = '<hr><table style="width:300px" border=0 cellPadding=1 cellSpacing=0>';
     for (var i=0; i < messages.length; i++) {
         if (i % 2 == 0) {
+            html += '<tr style="background-color:#0080FF"><td><font color="white">' +
+                messages[i] + "</font></td></tr>";
+        } else {
+            html += '<tr style="background-color:#FFF"><td>' + messages[i] + "</td></tr>";
             html += '<tr style="background-color:#0080FF"><td><font color="white">' +
                 messages[i] + "</font></td></tr>";
         } else {

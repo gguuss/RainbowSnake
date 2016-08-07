@@ -1,6 +1,6 @@
 /* server.h
  * All server properties and configuration forwarded to single page application.
- * 
+ *
  * All code based on:
  * ESP8266 + FastLED + IR Remote + MSGEQ7: https://github.com/jasoncoon/esp8266-fastled-webserver
  * Copyright (C) 2015 Jason Coon
@@ -99,7 +99,7 @@ void setPower(uint8_t value)
     strip.setBrightness(brightness);
   } else {
     FastLED.setBrightness(0);
-    strip.setBrightness(0);    
+    strip.setBrightness(0);
   }
 }
 
@@ -457,19 +457,19 @@ void setupServer(void) {
     String value = server.arg("value");
 
     Serial.println("setting size to:" + value);
-    
+
     NUM_LEDS = value.toInt();
     strip.updateLength(NUM_LEDS);
     fastLedSetup();
 
     String json = String("{\"size\":") + String(NUM_LEDS) + String("}");
     server.send(200, "text/json", json);
-    json = String();  
+    json = String();
   });
 
   server.on("/bpm", HTTP_POST, []() {
     String value = server.arg("value");
-    
+
     gBpm = value.toInt();
     fastLedSetup();
 
@@ -477,7 +477,6 @@ void setupServer(void) {
     server.send(200, "text/json", json);
     json = String();
   });
-
   server.on("/brightnessUp", HTTP_POST, []() {
     adjustBrightness(true);
     sendBrightness();
