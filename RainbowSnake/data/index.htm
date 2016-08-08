@@ -110,20 +110,23 @@
           </div>
           <!-- Size -->
           <div class="form-group">
-            <label class="col-sm-2 control-label">size</label>
+            <label for="sizeInput" class="col-sm-2 control-label">Size</label>
             <div class="col-sm-6">
-              <input type="text" id="sizeInput"></input>
+              <div class="input-group">
+                <span class="input-group-addon" id="spanSize">25</span>
+                <input class="form-control" id="sizeInput" type="range" step="1" min="25" max="100" />
+              </div>
             </div>
-            <button type="button" onclick="updateSize()">Update</button>
           </div>
 
-          <!-- Size -->
+          <!-- BPM -->
           <div class="form-group">
             <label class="col-sm-2 control-label">bpm</label>
             <div class="col-sm-6">
-              <input type="text" id="bpmInput"></input>
-            </div>
-            <button type="button" onclick="updateBpm()">Update</button>
+              <div class="input-group">
+                <span class="input-group-addon" id="spanBpm">120</span>
+                <input class="form-control" id="bpmInput" type="range" step="1" min="25" max="200" />
+              </div>
           </div>
           <!-- Messaging -->
           <div class="form-group" id="messaging">

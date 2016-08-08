@@ -3,7 +3,7 @@
  */
 
 /// Drawing helpers
-// (FUNCTION STOLEN FROM http://blog.saikoled.com/post/43693602826/why-every-led-light-should-be-using-hsi-colorspace on 10/27/14)
+// (http://blog.saikoled.com/post/43693602826/why-every-led-light-should-be-using-hsi-colorspace on 10/27/14)
 // This function will make it easier to create lighter and darker versions of the same color.
 void hsi2rgb(float H, float S, float I, uint32_t* rgb) {
   int r, g, b;
@@ -37,7 +37,7 @@ void hsi2rgb(float H, float S, float I, uint32_t* rgb) {
 // ----------------------------------------
 // Input a value 0 to 255 to get a color value.
 // The colors are a transition r - g - b - back to r.
-// ADAFruit Code - https://github.com/adafruit/Adafruit_NeoPixel
+// ADAFruit Code - https://github.com/adafruit/Adafruit_NeoPixel/blob/master/examples/RGBWstrandtest/RGBWstrandtest.ino
 // ----------------------------------------
 uint32_t wheel(byte WheelPos) {
   if (WheelPos < 85) {

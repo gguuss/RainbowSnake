@@ -50,7 +50,7 @@ if (drawHead) {
 
 
     // keep pins
-    translate([outerX - 9, outerY / 2 - 6, 14]) 
+    translate([outerX - 9, outerY / 2 - 6, 10]) 
       cube([5, 12, outerZ - 13]);
     translate([1, outerY / 2 - 6, 17]) 
       cube([5, 12, outerZ - 18]);

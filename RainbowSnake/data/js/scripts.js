@@ -66,9 +66,28 @@ $("#inputBrightness").on("change mousemove", function() {
    $("#spanBrightness").html($(this).val());
 });
 
+$("#sizeInput").on("change mousemove", function() {
+   $("#spanSize").html($(this).val());
+});
+
+
+$("#bpmInput").on("change mousemove", function() {
+   $("#spanBpm").html($(this).val());
+});
+
 $("#inputBrightness").on("change", function() {
    $("#spanBrightness").html($(this).val());
    delaySetBrightness();
+});
+
+$("#sizeInput").on("change", function() {
+   $("#spanSize").html($(this).val());
+   updateSize();
+});
+
+$("#bpmInput").on("change", function() {
+  $("#spanBpm").html($(this).val());
+  updateBpm();
 });
 
 $("#inputPattern").change(function() {
