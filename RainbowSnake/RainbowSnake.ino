@@ -1,5 +1,5 @@
 /**
- * led_mesh.ino - Enables mesh-networked LED controllers with server interface, chat network, 
+ * led_mesh.ino - Enables mesh-networked LED controllers with server interface, chat network,
  *    and sensor forwarding from mobile devices.
  */
 
@@ -32,7 +32,7 @@ String manageRequest(String request);
  * Globals, #FIXME
  */
 #define DISPCOUNT 10
-int debounce = 0; 
+int debounce = 0;
 int countLimit = NUMPIXELS * DISPCOUNT; // change mode after 10x
 int tick = 0;
 boolean firstPictureLoop = true;
@@ -45,6 +45,10 @@ void setup() {
     while(true) {
       rainbow(); // vary colors as much as possible
     }
+  #endif
+
+  #ifdef NOMODESWITCH
+  hasModeswitch = false;
   #endif
   // Start the serial monitor
   Serial.begin(115200);
@@ -64,14 +68,14 @@ void setup() {
 
   fastLedSetup();
 
-  setupServer();  
+  setupServer();
 
   mode = notFast ? VEE_YOU : STACK_LIGHTS;
 }
 
 /**
  * loop()
- * 
+ *
  * Arduino loop, performs the following:
  * 1. Checks web server
  * 2. Renders LED pattern
@@ -175,7 +179,7 @@ void loop() {
       showSolidColor();
       break;
     default:
-      mode = 0; 
+      mode = 0;
       break;
   }
 
@@ -184,9 +188,11 @@ void loop() {
     // Not even!
     checkModeButton();
   } else {
+    /*
     if (count > countLimit) {
       updateMeshMode();
     }
+    */
   }
 
   // Move along, nothing to see here...

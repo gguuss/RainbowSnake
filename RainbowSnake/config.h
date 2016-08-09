@@ -1,5 +1,5 @@
-/** 
- *  LED / color Globals, I'm sorry.
+/**
+ *  LED / color / board Globals, I'm sorry.
  */
 
 // Updates the mode to what's "next"
@@ -31,7 +31,7 @@ enum COLOR_MODES {
   FIRE = 11,
   FAST_RAINBOW = 12,
   RAINBOW_GLITTER = 13,
-  CONFETTI = 14, 
+  CONFETTI = 14,
   SINELON = 15,
   BPM = 16,
   JUGGLE = 17,
@@ -56,8 +56,15 @@ bool chaseUp = true;
 int      head  = 0, tail = -10; // Index of first 'on' and 'off' pixels
 uint32_t color = 0xFF0000;      // 'On' color (starts red)
 
+// BOARD SETTINGS -- full configurations below
+//#define SETTINGS_WEMOS
+#define SETTINGS_ESP8266
+//#define SETTINGS_ADK
+//#define SETTINGS_NANO
+//#define SETTINGS_HUZZAH8266
+
+
 // Settings correspond to WeMos/1Button
-#define SETTINGS_WEMOS
 #ifdef SETTINGS_WEMOS
 #define MODE_PIN   D3  // mode select pin connected to ground
 #define NUMPIXELS  25 // Number of LEDs in strip
@@ -70,7 +77,6 @@ Adafruit_DotStar strip = Adafruit_DotStar(
 //______________End WeMos settings
 
 // Settings correspond to Feather/shield
-//#define SETTINGS_HUZZAH8266
 #ifdef SETTINGS_HUZZAH8266
 #define NOT_FAST
 #define MODE_PIN   14  // mode select pin connected to ground
@@ -81,11 +87,10 @@ Adafruit_DotStar strip = Adafruit_DotStar(
 Adafruit_DotStar strip = Adafruit_DotStar(
   NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_BGR);
 #endif
-//______________End ESP8266 settings
+//______________End HUZZAH8266 settings
 
 
 // These settings correspond to the Ardino nano / USBAsp
-//#define SETTINGS_NANO
 #ifdef SETTINGS_NANO
 #define MODE_PIN   3 // mode select pin connected to ground
 #define NUMPIXELS 30 // Number of LEDs in strip
@@ -98,7 +103,6 @@ Adafruit_DotStar strip = Adafruit_DotStar(
 //______________End NANO settings
 
 // These settings correspond to the Ardino ADK
-//#define SETTINGS_ADK
 #ifdef SETTINGS_ADK
 #define MODE_PIN   3 // mode select pin connected to ground
 #define NUMPIXELS  12 // Number of LEDs in strip
@@ -112,13 +116,13 @@ Adafruit_DotStar strip = Adafruit_DotStar(
 //______________End ADK settings
 
 // Settings correspond to ESP8266
-//#define SETTINGS_ESP8266
 #ifdef SETTINGS_ESP8266
 #define MODE_PIN   2  // mode select pin connected to ground
 #define NUMPIXELS  25 // Number of LEDs in strip
 #define DATAPIN    5
 #define CLOCKPIN   4
 #define SYSDELAY   500
+#define NOMODESWITCH
 Adafruit_DotStar strip = Adafruit_DotStar(
   NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_GBR);
 #endif
