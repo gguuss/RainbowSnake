@@ -16,13 +16,19 @@
         <a class="navbar-brand" href="/">
 <div><font size="12"><span style="color:#ff0000;">R</span><span style="color:#ff2a00;">a</span><span style="color:#ff5500;">i</span><span style="color:#ff7f00;">n</span><span style="color:#ffbf00;">b</span><span style="color:#ffff00;">o</span><span style="color:#aaff00;">w</span><span style="color:#55ff00;"> </span><span style="color:#00ff00;">S</span><span style="color:#00ff80;">n</span><span style="color:#00ffff;">a</span><span style="color:#00ffff;">k</span><span style="color:#00ffff;">e</span><span style="color:#0000ff;">!</font></span></div>
         </a>
-          <a href="#messaging"><font color="#fff">&raquo; Messaging</font></a><br>
-          <a href="#senors"><font color="#fff">&raquo; Sensors</font></a><br>
           <a href="#"><font color="#fff">&raquo; <span id="apname">::</span></font></a>
       </div>
     </div>
   </header>
   <div class="container">
+    <ul class="nav nav-tabs">
+      <li><a href="#" onclick="$('#configMenu').show(); $('#comms').hide(); $('#toys').hide();">Config</a></li>
+      <li><a href="#comms" onclick="$('#configMenu').hide(); $('#comms').show();  $('#toys').hide();">Comms</a></li>
+      <li><a href="#toys" onclick="$('#toys').show(); $('#configMenu').hide(); $('#comms').hide();">Toys</a></li>
+    </ul>
+
+    <!-- Configuration -->
+    <div id="configMenu">
     <form class="form-horizontal">
       <div class="form-group">
         <div class="col-sm-1 col-sm-offset-2">
@@ -52,6 +58,30 @@
           </div>
         </div>
       </div>
+
+      <!-- Size -->
+      <div class="form-group">
+        <label for="sizeInput" class="col-sm-2 control-label">Size</label>
+        <div class="col-sm-6">
+          <div class="input-group">
+            <span class="input-group-addon" id="spanSize">25</span>
+            <input class="form-control" id="sizeInput" type="range" step="1" min="25" max="100" />
+          </div>
+        </div>
+      </div>
+
+      <!-- BPM -->
+      <div class="form-group">
+        <label class="col-sm-2 control-label">bpm</label>
+        <div class="col-sm-6">
+          <div class="input-group">
+            <span class="input-group-addon" id="spanBpm">120</span>
+            <input class="form-control" id="bpmInput" type="range" step="1" min="25" max="200" />
+          </div>
+        </div>
+      </div>
+
+      <!-- pattern -->
       <div class="form-group">
         <label for="inputPattern" class="col-sm-2 control-label">Pattern</label>
         <div class="col-sm-6">
@@ -62,6 +92,8 @@
           </select>
         </div>
       </div>
+
+      <!-- Color -->
       <div class="form-group">
         <label for="inputColor" class="col-sm-2 control-label">Color</label>
         <div class="col-sm-6">
@@ -80,82 +112,72 @@
             <div class="btn-group" role="group">
               <button type="button" class="btn btn-default btn-color" style="background: #FFFF00;" title="Yellow">&nbsp;</button>
             </div>
-              <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default btn-color" style="background: #80FF00;" title="Chartreuse">&nbsp;</button>
-              </div>
-              <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default btn-color" style="background: #00FF00;" title="Green">&nbsp;</button>
-              </div>
-              <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default btn-color" style="background: #00FF80;" title="Spring Green">&nbsp;</button>
-              </div>
-              <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default btn-color" style="background: #00FFFF;" title="Cyan">&nbsp;</button>
-              </div>
-              <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default btn-color" style="background: #0080FF;" title="Azure">&nbsp;</button>
-              </div>
-              <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default btn-color" style="background: #0000FF;" title="Blue">&nbsp;</button>
-              </div>
-              <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default btn-color" style="background: #8000FF;" title="Violet">&nbsp;</button>
-              </div>
-              <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default btn-color" style="background: #FF00FF;" title="Magenta">&nbsp;</button>
-              </div>
-              <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default btn-color" style="background: #FF0080;" title="Rose">&nbsp;</button>
-              </div>
-          </div>
-          <!-- Size -->
-          <div class="form-group">
-            <label for="sizeInput" class="col-sm-2 control-label">Size</label>
-            <div class="col-sm-6">
-              <div class="input-group">
-                <span class="input-group-addon" id="spanSize">25</span>
-                <input class="form-control" id="sizeInput" type="range" step="1" min="25" max="100" />
-              </div>
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-default btn-color" style="background: #80FF00;" title="Chartreuse">&nbsp;</button>
+            </div>
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-default btn-color" style="background: #00FF00;" title="Green">&nbsp;</button>
+            </div>
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-default btn-color" style="background: #00FF80;" title="Spring Green">&nbsp;</button>
+            </div>
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-default btn-color" style="background: #00FFFF;" title="Cyan">&nbsp;</button>
+            </div>
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-default btn-color" style="background: #0080FF;" title="Azure">&nbsp;</button>
+            </div>
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-default btn-color" style="background: #0000FF;" title="Blue">&nbsp;</button>
+            </div>
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-default btn-color" style="background: #8000FF;" title="Violet">&nbsp;</button>
+            </div>
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-default btn-color" style="background: #FF00FF;" title="Magenta">&nbsp;</button>
+            </div>
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-default btn-color" style="background: #FF0080;" title="Rose">&nbsp;</button>
             </div>
           </div>
+        </div>
+      </div> <!-- end form group -->
+    </div>
+    </form>
+    <!-- END configuration -->
 
-          <!-- BPM -->
-          <div class="form-group">
-            <label class="col-sm-2 control-label">bpm</label>
-            <div class="col-sm-6">
-              <div class="input-group">
-                <span class="input-group-addon" id="spanBpm">120</span>
-                <input class="form-control" id="bpmInput" type="range" step="1" min="25" max="200" />
-              </div>
-          </div>
-          <!-- Messaging -->
-          <div class="form-group" id="messaging">
-            <label class="col-sm-2 control-label">Chat</label>
-            <div class="col-sm-6" id="messageArea">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label">Message</label>
-            <div class="col-sm-6">
-              <input type="text" id="message" style="width:300px" />
-              <button type="button" class="btn btn-default">
-                <span class="glyphicon glyphicon-send" id="btnSend"></btnMessage>
-              </button>
-            </div>
-          </div>
-          <!-- End messaging -->
-          <!-- Mobile Sensors -->
+    <form class="form-horizontal">
+      <div id="comms" style="display:none">
+      <!-- Messaging -->
+      <div class="form-group" id="messaging">
+        <label class="col-sm-2 control-label">Chat</label>
+        <div class="col-sm-6" id="messageArea">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Message</label>
+        <div class="col-sm-6">
+          <input type="text" id="message" style="width:300px" />
+          <button type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-send" id="btnSend"></btnMessage>
+          </button>
+        </div>
+      </div>
+      <!-- End messaging -->
+      </div>
+    </form>
 
-          <div class="form-group" id="senors">
-            <label class="col-sm-2 control-label">Mobile Sensors</label>
-            <div class="col-sm-6">
-              <div>
-
+    <form class="form-horizontal">
+      <div id="toys" style="display:none">
+        <!-- Mobile Sensors -->
+        <div class="form-group" id="senors">
+          <label class="col-sm-2 control-label">Mobile Sensors</label>
+          <div class="col-sm-6">
+            <div>
               <pre style="width:200; height:45; background-color:#CCCCCC" id="latLongConsole">
               </pre>
               <pre style="width:200; height:100; background-color:#EEEEEE" id="gyroConsole">
               </pre>
-
               <pre stye="width:100; height:20;" id="headingConsole"></pre>
               <!--
               <img id="compass-image" src="images/compass.png" />
@@ -163,11 +185,30 @@
               <pre id="console"></pre>
             </div>
           </div>
-          <!-- End mobile sensors -->
         </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">VU Meter</label>
+          <div class="col-sm-6">
+            TBD
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Pattern Editor</label>
+          <div class="col-sm-6">
+            TBD
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">BPM Tapper</label>
+          <div class="col-sm-6">
+            TBD
+          </div>
+        </div>
+        <!-- End mobile sensors -->
       </div>
     </form>
-  </div>
+
+  </div> <!-- END container -->
     <!-- start gguuss code -->
     <!-- Additions from for enabling sensors access to phone -->
 
