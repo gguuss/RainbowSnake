@@ -16,6 +16,7 @@ String manageRequest(String request);
 #include "fastled.h"
 #include "colors_ext.h"
 #include "colors.h"
+#include "colors_button.h"
 #include "pov.h"
 
 // server
@@ -71,6 +72,8 @@ void setup() {
   setupServer();
 
   mode = notFast ? VEE_YOU : STACK_LIGHTS;
+  //mode = numButtonClickerModes;
+
 }
 
 /**
@@ -178,13 +181,19 @@ void loop() {
     case SOLIDCOLOR:
       showSolidColor();
       break;
+    case BUTTON_CLICKER:
+      buttonClicker();
+      break;
+    case GROW_CLICKER:
+      growClicker();
+      break;
     default:
       mode = 0;
       break;
   }
 
   // Change the mode
-  if (hasModeswitch) {
+  if (hasModeswitch && (mode <= numFastModes)) {
     // Not even!
     checkModeButton();
   } else {

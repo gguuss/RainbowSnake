@@ -179,6 +179,8 @@ PatternAndNameList patterns = {
   { bpm, "Rainbow Spray"},
   { showSolidColor, "BPM" },
   { bpm, "Pride" },
+  { buttonClicker, "Button Clicker" },
+  { growClicker, "Grow Clicker" },
   { showSolidColor, "Show Solid Color" }
 };
 const uint8_t patternCount = ARRAY_SIZE(patterns);

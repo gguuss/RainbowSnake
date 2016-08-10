@@ -19,10 +19,8 @@ void changeMode() {
       mode++;
     }
   } else {
-    Serial.println("Fast");
-    Serial.println(numFastModes);
-    Serial.println(mode);
-    if (mode > numFastModes){
+    // Careful, this is correct AFAIK
+    if (mode >= numFastModes){
       mode = 0;
     } else {
       mode++;

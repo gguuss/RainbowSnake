@@ -10,9 +10,10 @@ int peerCount = 0; // Mesh peer count global
 
 static bool hasModeswitch = true; // true
 
-#define NUMM_MODES 9
+#define NUMM_MODES 9 // number of dotstar patterns
 int numModes = NUMM_MODES; // SEE below enum
-int numFastModes = 25;
+int numFastModes = 24; // set to last fast value
+int numButtonClickerModes = 26; // set to number of clicker modes
 enum COLOR_MODES {
   // Adafruit modes
   ADA_LOOP = 0,
@@ -42,7 +43,11 @@ enum COLOR_MODES {
   BUBBLE_UP = 22,
   COLOR_WAVES = 23,
   PRIDE = 24,
-  SOLIDCOLOR = 25
+
+  // Button Modes
+  BUTTON_CLICKER = 25,
+  GROW_CLICKER = 26,
+  SOLIDCOLOR = 27
 };
 
 // TWEAK ME!!!
