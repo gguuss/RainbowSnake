@@ -174,15 +174,20 @@
           <label class="col-sm-2 control-label">Mobile Sensors</label>
           <div class="col-sm-6">
             <div>
-              <pre style="width:200; height:45; background-color:#CCCCCC" id="latLongConsole">
+              <pre style="display:none; width:200; height:45; background-color:#CCCCCC" id="latLongConsole">
               </pre>
+
+              <div class="btn-group" role="group" aria-label="GyroColor">
+                <button type="button" class="btn btn-default" id="gyroOn">On</button>
+                <button type="button" class="btn btn-default" onclick="stopMotionColor()" id="gyroOff">Off</button>
+              </div>
               <pre style="width:200; height:100; background-color:#EEEEEE" id="gyroConsole">
               </pre>
-              <pre stye="width:100; height:20;" id="headingConsole"></pre>
+              <pre stye="display:none; width:100; height:20;" id="headingConsole"></pre>
               <!--
               <img id="compass-image" src="images/compass.png" />
               -->
-              <pre id="console"></pre>
+              <pre style="display:none;" id="console"></pre>
             </div>
           </div>
         </div>
@@ -251,14 +256,16 @@
     window.addEventListener('deviceorientation', handleCompassEvent, false);
     */
 
+    var alpha,beta,gamma;
     handleOrientationEvent = function(e) {
-        var alpha = e.alpha,
-            beta = e.beta,
-            gamma = e.gamma;
-        document.getElementById('gyroConsole').innerText =
-          'Alpha: ' + alpha + '\n' +
-          'Beta: ' + beta + '\n' +
-          'Gamma: ' + gamma + '\n';
+
+      alpha = e.alpha,
+        beta = e.beta,
+        gamma = e.gamma;
+      document.getElementById('gyroConsole').innerText =
+        'Alpha: ' + alpha + '\n' +
+        'Beta: ' + beta + '\n' +
+        'Gamma: ' + gamma + '\n';
     };
 
     window.addEventListener('deviceorientation', handleOrientationEvent, false);

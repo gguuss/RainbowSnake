@@ -62,6 +62,14 @@ $("#btnPowerOff").click(function() {
   setPower(0);
 });
 
+$('#gyroOn').click(function() {
+    startMotionColor();
+});
+
+$('#gyroOff').click(function() {
+    stopMotionColor();
+});
+
 $("#inputBrightness").on("change mousemove", function() {
    $("#spanBrightness").html($(this).val());
 });
@@ -251,4 +259,22 @@ function rgbToComponents(rgb){
    components.b = parseInt(rgb[3]);
 
    return components;
- }
+}
+
+
+function sendColor(){
+  var rgb = {
+    r : (Math.abs(alpha) / 360) * 255,
+    g : (Math.abs(beta) / 360)  * 255,
+    b : (Math.abs(gamma) / 360) * 255
+  }
+  setColor(rgb);
+}
+
+var timeoutId;
+function startMotionColor(){
+  timeoutId = setInterval(function() {sendColor();}, 100);
+}
+function stopMotionColor(){
+  window.clearTimeout(timeoutId);
+}

@@ -57,8 +57,8 @@ int      head  = 0, tail = -10; // Index of first 'on' and 'off' pixels
 uint32_t color = 0xFF0000;      // 'On' color (starts red)
 
 // BOARD SETTINGS -- full configurations below
-//#define SETTINGS_WEMOS
-#define SETTINGS_ESP8266
+#define SETTINGS_WEMOS
+//#define SETTINGS_ESP8266
 //#define SETTINGS_ADK
 //#define SETTINGS_NANO
 //#define SETTINGS_HUZZAH8266

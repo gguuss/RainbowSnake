@@ -211,14 +211,10 @@ void updateMeshMessage(){
   char buf[1024];
   message.toCharArray(buf, 2048);
   String urlMessage = URLEncode(buf);
-  
-  String request = String("POST /messageBroadcast") + String(" HTTP/1.1\r\n") +
-              String("Host: ") + String(SERVER_NAME) + String("\r\n") + 
-              String("Connection: keep-alive\r\n") +
-              String("Content-Type: application/x-www-form-urlencoded\r\n") +
-              String("Content-Length: ") + String(urlMessage.length()) + String("\r\n") +
-              String("value=") + urlMessage + " \r\n\r\n";
-
+    
+  String request = String("POST /messageBroadcast?value=") + String(urlMessage) + String(" HTTP/1.1\r\n") +
+               String("Host: ") + String(SERVER_NAME) + String("\r\n") + 
+               String("Connection: close\r\n\r\n");
   Serial.println(request);
   sendMessageManual(request);
   count = 0;
