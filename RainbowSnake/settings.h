@@ -19,6 +19,7 @@ int updateSelection(int numModes) {
 
   int difference = millis() - lastPress;
   if (buttonState != HIGH) {
+    hasNotification = false;
     if (difference < SWITCHWAITPERIOD) {
       settingsPressCount += 1;
     } else {

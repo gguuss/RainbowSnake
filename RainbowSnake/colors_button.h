@@ -26,6 +26,7 @@ int clickerColorIndex = 0;
 void buttonClicker() {
   rotateAdaPixels();
   if (buttonOn()) {
+    hasNotification = false;
     if (changeColor) {
       clickerColorIndex += random(10, 25);
       if (clickerColorIndex > 255) {
@@ -49,6 +50,7 @@ int wheelTick = 0;
  */
 void growClicker () {
   if (buttonOn()) {
+    hasNotification = false;
     buttonClickerSize++;
     if (buttonClickerSize > strip.numPixels()) {
       buttonClickerSize = strip.numPixels();

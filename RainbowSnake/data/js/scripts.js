@@ -70,6 +70,14 @@ $('#gyroOff').click(function() {
     stopMotionColor();
 });
 
+$('#btnCompassOn').click(function() {
+    startCompass();
+});
+
+$('#btnCompassOff').click(function() {
+    stopCompass();
+});
+
 $("#inputBrightness").on("change mousemove", function() {
    $("#spanBrightness").html($(this).val());
 });
@@ -241,6 +249,12 @@ function setColor(value) {
   });
 }
 
+function sendCompass(value) {
+  $.post(urlBase + "compass?value=" + value, function(data) {
+    $("#status").html("Set compass: " + data.name);
+  });
+}
+
 function componentToHex(c) {
     var hex = c.toString(16);
     return hex.length == 1 ? "0" + hex : hex;
@@ -275,6 +289,29 @@ var timeoutId;
 function startMotionColor(){
   timeoutId = setInterval(function() {sendColor();}, 100);
 }
+
 function stopMotionColor(){
-  window.clearTimeout(timeoutId);
+  window.clearInterval(timeoutId);
 }
+
+var compassTimeoutId;
+var compassHeading;
+function startCompass(){
+  compassTimeoutId = setInterval(function() { sendCompass(compassHeading); }, 300);
+}
+
+function stopCompass() {
+    window.clearInterval(compassTimeoutId);
+}
+
+var handleCompassEvent = function(e) {
+    compassHeading = e.webkitCompassHeading;
+    if (!compassHeading) {
+      compassHeading = event.alpha;
+      if(!window.chrome) {
+        compassHeading = compassHeading;
+      }
+    }
+    document.getElementById('headingConsole').innerText = compassHeading + 'deg';
+};
+window.addEventListener('deviceorientation', handleCompassEvent, false);

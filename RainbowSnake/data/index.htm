@@ -179,14 +179,17 @@
 
               <div class="btn-group" role="group" aria-label="GyroColor">
                 <button type="button" class="btn btn-default" id="gyroOn">On</button>
-                <button type="button" class="btn btn-default" onclick="stopMotionColor()" id="gyroOff">Off</button>
+                <button type="button" class="btn btn-default" id="gyroOff">Off</button>
               </div>
               <pre style="width:200; height:100; background-color:#EEEEEE" id="gyroConsole">
               </pre>
-              <pre stye="display:none; width:100; height:20;" id="headingConsole"></pre>
+              <pre stye="width:100; height:20;" id="headingConsole"></pre>
               <!--
               <img id="compass-image" src="images/compass.png" />
               -->
+              <div class="btn-group" role="group" aria-label="GyroColor">
+                <button type="button" class="btn btn-default" id="btnCompassOn">On</button>
+                <button type="button" class="btn btn-default" id="btnCompassOff">Off</button>
               <pre style="display:none;" id="console"></pre>
             </div>
           </div>
@@ -205,6 +208,12 @@
         </div>
         <div class="form-group">
           <label class="col-sm-2 control-label">BPM Tapper</label>
+          <div class="col-sm-6">
+            TBD
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Snake Sniffer</label>
           <div class="col-sm-6">
             TBD
           </div>
@@ -239,22 +248,6 @@
 
     window.addEventListener('orientationchange', onOrientationChange, false);
     onOrientationChange();
-
-    /*
-    var compassElem = document.getElementById('compass-image');
-    handleCompassEvent = function(e) {
-        var compassHeading = e.webkitCompassHeading;
-        if (!compassHeading) {
-          compassHeading = event.alpha;
-          if(!window.chrome) {
-            compassHeading = compassHeading;
-          }
-        }
-        document.getElementById('headingConsole').innerText = compassHeading;
-        compassElem.style.webkitTransform = 'rotate(' + (-compassHeading) + 'deg)';
-    };
-    window.addEventListener('deviceorientation', handleCompassEvent, false);
-    */
 
     var alpha,beta,gamma;
     handleOrientationEvent = function(e) {

@@ -18,6 +18,7 @@ String manageRequest(String request);
 #include "colors.h"
 #include "colors_button.h"
 #include "pov.h"
+#include "gps.h"
 
 // server
 #include "server.h"
@@ -74,7 +75,10 @@ void setup() {
   mode = notFast ? VEE_YOU : STACK_LIGHTS;
   //mode = numButtonClickerModes;
 
+  // for testing notification
+  hasNotification = true;
 }
+
 
 /**
  * loop()
@@ -187,13 +191,16 @@ void loop() {
     case GROW_CLICKER:
       growClicker();
       break;
+    case COMPASS:
+      compass();
+      break;
     default:
       mode = 0;
       break;
   }
 
   // Change the mode
-  if (hasModeswitch && (mode <= numFastModes)) {
+  if (hasModeswitch && (mode <= numFastModes || mode == SOLIDCOLOR)) {
     // Not even!
     checkModeButton();
   } else {
@@ -203,6 +210,8 @@ void loop() {
     }
     */
   }
+
+  checkNotify();
 
   // Move along, nothing to see here...
   count++;

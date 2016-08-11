@@ -11,6 +11,7 @@ boolean notFast = true; // disable fastled patterns
 #endif
 
 void changeMode() {
+  hasNotification = false;
   if (notFast){
     Serial.println("Not fast");
     if (mode > numModes){
@@ -112,6 +113,7 @@ void checkModeButton() {
     // check if the pushbutton is pressed.
     // if it is, the buttonState is HIGH:
     if (buttonState != HIGH) {
+      hasNotification = false;
       Serial.println("Button triggered.");
 
       unsigned long milliStart = millis();

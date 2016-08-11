@@ -181,6 +181,7 @@ PatternAndNameList patterns = {
   { bpm, "Pride" },
   { buttonClicker, "Button Clicker" },
   { growClicker, "Grow Clicker" },
+  { compass, "Compass" },
   { showSolidColor, "Show Solid Color" }
 };
 const uint8_t patternCount = ARRAY_SIZE(patterns);
@@ -386,6 +387,7 @@ void setupServer(void) {
 
   server.on("/all", HTTP_GET, []() {
     sendAll();
+    hasNotification = false;
   });
 
   server.on("/power", HTTP_GET, []() {
@@ -410,11 +412,22 @@ void setupServer(void) {
     sendSolidColor();
   });
 
+  server.on("/compass", HTTP_POST, []() {
+    compassDir = server.arg("value").toInt();
+    Serial.print("Compass:"); Serial.println(compassDir);
+    mode = COMPASS;
+  
+    String json = String(compassDir);
+    server.send(200, "text/json", json);
+    json = String();
+  });
+
   server.on("/pattern", HTTP_GET, []() {
     sendPattern();
   });
 
   server.on("/pattern", HTTP_POST, []() {
+    hasNotification = false;
     String value = server.arg("value");
     setPattern(value.toInt());
     sendPattern();
@@ -452,14 +465,12 @@ void setupServer(void) {
     String value = server.arg("value");
     // TODO: can this overflow?  Maybe use a queue
     message = value;
-    Serial.println("Message now: " + message);
+    hasNotification = true;
+    resetNotify();
   });
 
   server.on("/size", HTTP_POST, []() {
     String value = server.arg("value");
-
-    Serial.println("setting size to:" + value);
-
     NUM_LEDS = value.toInt();
     strip.updateLength(NUM_LEDS);
     fastLedSetup();

@@ -7,8 +7,9 @@
 int mode = 1; // TODO: Rename, current color mode
 int count = 0; // Display loop count global
 int peerCount = 0; // Mesh peer count global
-
+int compassDir = 0; // heading
 static bool hasModeswitch = true; // true
+boolean hasNotification = false;
 
 #define NUMM_MODES 9 // number of dotstar patterns
 int numModes = NUMM_MODES; // SEE below enum
@@ -47,7 +48,10 @@ enum COLOR_MODES {
   // Button Modes
   BUTTON_CLICKER = 25,
   GROW_CLICKER = 26,
-  SOLIDCOLOR = 27
+
+  // Must be last
+  COMPASS = 27,
+  SOLIDCOLOR = 28
 };
 
 // TWEAK ME!!!
@@ -134,3 +138,39 @@ Adafruit_DotStar strip = Adafruit_DotStar(
 //______________End ESP8266 settings
 
 
+/**
+ * Notification loop, exponentially backs off
+ */
+unsigned long lastNotification = 0;
+int backOffCounter = 2;
+
+/**
+ * Resets notofication variables.
+ */
+void resetNotify() {
+  lastNotification = 0;
+  backOffCounter = 2;
+}
+
+/**
+ * Exponentially backing off pattern that notifies the user
+ * that they have been notified.
+ */
+void checkNotify() {
+  uint32_t colors[] = {0xFF0000, 0x00FF00, 0x0000FF};
+  if (hasNotification && ((millis() - lastNotification) > backOffCounter*1000) ) {
+    strip.clear();
+    for (int i=0; i < 6; i++){
+      for (int j=0; j < 3; j++) {
+          strip.setPixelColor(j, colors[i%3]);
+      }
+      strip.show();
+      delay(100);
+      strip.clear();
+      strip.show();
+      delay(50);
+    }
+    lastNotification = millis();
+    backOffCounter *= 2;
+  }
+}
