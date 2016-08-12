@@ -167,39 +167,65 @@
       </div>
     </form>
 
+    <!-- Toys -->
     <form class="form-horizontal">
       <div id="toys" style="display:none">
-        <!-- Mobile Sensors -->
+
+        <!-- Gyro -->
         <div class="form-group" id="senors">
-          <label class="col-sm-2 control-label">Mobile Sensors</label>
+          <label class="col-sm-2 control-label">Gyro/Accel</label>
           <div class="col-sm-6">
             <div>
               <pre style="display:none; width:200; height:45; background-color:#CCCCCC" id="latLongConsole">
-              </pre>
-
+              </pre>        
               <div class="btn-group" role="group" aria-label="GyroColor">
                 <button type="button" class="btn btn-default" id="gyroOn">On</button>
                 <button type="button" class="btn btn-default" id="gyroOff">Off</button>
               </div>
+              <!-- To enable or disable ... -->
               <pre style="width:200; height:100; background-color:#EEEEEE" id="gyroConsole">
-              </pre>
-              <pre stye="width:100; height:20;" id="headingConsole"></pre>
-              <!--
-              <img id="compass-image" src="images/compass.png" />
-              -->
-              <div class="btn-group" role="group" aria-label="GyroColor">
-                <button type="button" class="btn btn-default" id="btnCompassOn">On</button>
-                <button type="button" class="btn btn-default" id="btnCompassOff">Off</button>
-              <pre style="display:none;" id="console"></pre>
+              </pre>        
             </div>
           </div>
         </div>
+        <!-- End Gyro -->       
+
+        <!-- Compass -->
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Compass</label>
+          <div class="col-sm-6">
+            <div class="btn-group" role="group" aria-label="GyroColor">
+              <button type="button" class="btn btn-default" id="btnCompassOn">On</button>
+              <button type="button" class="btn btn-default" id="btnCompassOff">Off</button>
+            </div>
+            <pre stye="width:100; height:20;" id="headingConsole"></pre>            
+            <pre style="display:none;" id="console"></pre>
+          </div>
+        </div>
+        <!-- End Compass -->
+
+
+        <!-- GPS -->
+        <div class="form-group">
+          <label class="col-sm-2 control-label">GPS</label>
+          <div class="col-sm-6">
+            Lat: <input id="latitude" type="text" class="form-control" />
+            Long: <input id="longitude" type="text" class="form-control" />
+          </div>          
+        </div>
+        <!-- End GPS -->
+
+        <!-- VU Meter -->
+        <!-- doesn't work in mobile browsers -->
         <div class="form-group">
           <label class="col-sm-2 control-label">VU Meter</label>
           <div class="col-sm-6">
-            TBD
+            <div id="vumeter" style="color: 0xFF0000; width:5px;">.</div>
           </div>
         </div>
+        <!-- End VU Meter -->
+
+
         <div class="form-group">
           <label class="col-sm-2 control-label">Pattern Editor</label>
           <div class="col-sm-6">
@@ -212,16 +238,10 @@
             TBD
           </div>
         </div>
-        <div class="form-group">
-          <label class="col-sm-2 control-label">Snake Sniffer</label>
-          <div class="col-sm-6">
-            TBD
-          </div>
-        </div>
-        <!-- End mobile sensors -->
       </div>
-    </form>
+      <!-- End Toys -->
 
+    </form>
   </div> <!-- END container -->
     <!-- start gguuss code -->
     <!-- Additions from for enabling sensors access to phone -->
@@ -238,8 +258,11 @@
         console.log(location.coords.latitude);
         console.log(location.coords.longitude);
         console.log(location.coords.accuracy);
+        $('latitude').val(location.coords.latitude);
+        $('longitude').val(location.coords.longitude);
       });
     }
+    setInterval(function() { updateGeo(); }, 100);
 
     var onOrientationChange = function() {
       var isPortrait = window.orientation % 180 === 0;
