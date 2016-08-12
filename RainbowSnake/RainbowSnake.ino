@@ -76,7 +76,7 @@ void setup() {
   //mode = numButtonClickerModes;
 
   // for testing notification
-  hasNotification = true;
+  //hasNotification = true;
 }
 
 
@@ -193,6 +193,9 @@ void loop() {
       break;
     case COMPASS:
       compass();
+      break;
+    case BUTTON_MESHCOUNT:
+      buttonCountMeshNodes();
       break;
     default:
       mode = 0;

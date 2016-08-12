@@ -116,7 +116,7 @@ void connectToNodeManual(String target_ssid, String message)
   WiFiClient curr_client;
   WiFi.begin( target_ssid.c_str() );
 
-  int wait = 3000;
+  int wait = 5000;
   while((WiFi.status() == WL_DISCONNECTED) && wait--)
     delay(3);
 
@@ -237,5 +237,65 @@ void updateMeshMode() {
   Serial.println(request);
   sendMessageManual(request);
   count = 0;
+}
+
+/**
+ * Counts mesh nodes and renders to display
+ */
+void countMeshNodes() {
+    /* Scan for APs */
+  int n = WiFi.scanNetworks();
+  delay(0);
+
+  int foundAPs = 0;
+
+  for (int i = 0; i < n; ++i) {
+    String current_ssid = WiFi.SSID(i);
+    int index = current_ssid.indexOf( _ssid_prefix);
+    uint32_t target_chip_id = (current_ssid.substring(index + _ssid_prefix.length())).toInt();
+
+    /* Connect to any _suitable_ APs which contain _ssid_prefix */
+    if (index >= 0) {
+      strip.setPixelColor(foundAPs, 255, 0, 0);
+      strip.show();    
+      delay(50);
+      foundAPs++;
+    }
+  }
+  strip.show();
+  Serial.println("Found " + String(foundAPs) + " AP[s]");
+
+  while (buttonOn()) {
+    delay(25);
+  }
+}
+
+void startCountAnimation(){
+  // Position white pixels
+  for (int i=0; i < 5; i++){
+    strip.setPixelColor(i, 0xFFFFFF); 
+    strip.show();
+    delay(50);
+    
+    rotateAdaPixels();    
+  }
+  // Clear pixels
+  for (int i=0; i < strip.numPixels(); i++){
+    rotateAdaPixels();
+    strip.show();
+    delay(25);
+    
+    strip.setPixelColor(0, 0);  
+  }
+}
+
+void buttonCountMeshNodes() {
+  if (buttonOn()) {
+    startCountAnimation();
+    countMeshNodes();
+  } else {
+    strip.clear();
+    strip.show();
+  }
 }
 #endif

@@ -14,7 +14,7 @@ boolean hasNotification = false;
 #define NUMM_MODES 9 // number of dotstar patterns
 int numModes = NUMM_MODES; // SEE below enum
 int numFastModes = 24; // set to last fast value
-int numButtonClickerModes = 26; // set to number of clicker modes
+int numButtonClickerModes = 28; // set to number of clicker modes
 enum COLOR_MODES {
   // Adafruit modes
   ADA_LOOP = 0,
@@ -48,10 +48,11 @@ enum COLOR_MODES {
   // Button Modes
   BUTTON_CLICKER = 25,
   GROW_CLICKER = 26,
-
-  // Must be last
   COMPASS = 27,
-  SOLIDCOLOR = 28
+  BUTTON_MESHCOUNT = 28,
+
+  // Must be last  
+  SOLIDCOLOR = 29
 };
 
 // TWEAK ME!!!

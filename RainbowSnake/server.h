@@ -182,6 +182,7 @@ PatternAndNameList patterns = {
   { buttonClicker, "Button Clicker" },
   { growClicker, "Grow Clicker" },
   { compass, "Compass" },
+  { countMeshNodes, "Count Mesh Nodes" },
   { showSolidColor, "Show Solid Color" }
 };
 const uint8_t patternCount = ARRAY_SIZE(patterns);

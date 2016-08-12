@@ -10,6 +10,8 @@
 
 /**
  * updateSelection - Helper that rotates the current menu choice.
+ * 
+ * @return 0 when timeout expires, otherwise 1 ... numModes.
  */
 int settingsPressCount = 0;
 unsigned long lastPress = 1;
@@ -20,15 +22,19 @@ int updateSelection(int numModes) {
   int difference = millis() - lastPress;
   if (buttonState != HIGH) {
     hasNotification = false;
+    
+    // Increment / decrement based on wait time
     if (difference < SWITCHWAITPERIOD) {
       settingsPressCount += 1;
     } else {
       settingsPressCount -= 1;
     }
+    //
     while(buttonState != HIGH) {
         buttonState = digitalRead(MODE_PIN);
     }
 
+    // Ensure we return 1 ... numModes
     if (settingsPressCount < 1){
       settingsPressCount = 1;
     }
@@ -57,7 +63,7 @@ void displaySettings(int selectedMode) {
   for (int i=0; i < strip.numPixels(); i++){
     if (i < mod){
       // Green - size
-      if (i <= selectedMode) // Yellow - brightness
+      if (i <= mod) // Yellow - brightness
         strip.setPixelColor(i, strip.Color(255, 255, 0));
       else
         strip.setPixelColor(i, 0);
@@ -87,8 +93,8 @@ void displaySettings(int selectedMode) {
  * @param settingsMode The currently selected value.
  */
 void displayMode(int settingsMode) {
-  int mod = strip.numPixels() / 4;
-  uint32_t color = 0xFF0000;
+  int mod = (strip.numPixels() / 4);
+  uint32_t color = 0xFFFFFF;  
   switch(settingsMode) {
     case 1:
       color = strip.Color(0, 255, 0);
@@ -103,14 +109,17 @@ void displayMode(int settingsMode) {
       color = strip.Color(0, 0, 255);
       break;
   }
-  for (int i = 0; i < strip.numPixels(); i++){
-    if ((mod * (settingsMode - 1)) <= i && (mod * settingsMode) > i) {
+
+  // TODO: fix awful
+  Serial.println("Mod : " + String(mod));
+  Serial.println("settingsMode : " + String(settingsMode));
+
+  strip.clear();
+  for (int i = mod * (settingsMode - 1); i < mod * settingsMode && i < strip.numPixels(); i++){    
       strip.setPixelColor(i, color);
-    } else {
-      strip.setPixelColor(i, 0);  
-    }
   }
   strip.show();
+  delay(100);
 }
 
 /**
@@ -123,16 +132,18 @@ int settingsSelect(){
   int settingsDifference = 0;
   int selectedOption = 0;
   int lastInput = 0;
-  settingsPressCount = 1;
+  settingsPressCount = 0;
   while (settingsDifference < MODESELECTWAIT) {
     settingsDifference = millis() - settingsPressTime;
     lastInput = updateSelection(4);
     if (lastInput > 0){
       selectedOption = lastInput;
       settingsPressTime = millis();
-      displayMode(selectedOption);
+      // TODO: fix awful, display does not correspond to input?
+      Serial.println("input now: " + String(lastInput));      
     }
     delay(0);
+    displayMode(selectedOption);
   }
   return selectedOption;
 }
@@ -170,7 +181,12 @@ void brightnessSelect() {
   while (settingsDifference < MODESELECTWAIT) {
     settingsDifference = millis() - settingsPressTime;
     lastInput = updateSelection(5);
-    Serial.println(lastInput);
+
+    // TODO: fix awful
+    if (lastInput > 0){
+      Serial.println(lastInput);
+    }
+    
     if (lastInput > 0){
       selectedOption = lastInput;
       settingsPressTime = millis();
@@ -223,13 +239,37 @@ void sizeSelect() {
   while (settingsDifference < MODESELECTWAIT) {
     settingsDifference = millis() - settingsPressTime;
     lastInput = updateSelection(50);
-    Serial.println(lastInput);
+    if (lastInput > 0) {
+      Serial.println(lastInput);
+    }
     if (lastInput > 0){
       selectedOption = lastInput;
       settingsPressTime = millis();
       updateSize(selectedOption);
     }
     delay(0);
+  }
+}
+
+/**
+ * Helpful animation indicating an option was selected.
+ */
+void animateMenuSelect(uint32_t color){
+  // Position white pixels
+  for (int i=0; i < 5; i++){
+    strip.setPixelColor(i, color); 
+    strip.show();
+    delay(50);
+    
+    rotateAdaPixels();
+  }
+  // Clear pixels
+  for (int i=0; i < strip.numPixels(); i++){
+    rotateAdaPixels();
+    strip.show();
+    delay(25);
+    
+    strip.setPixelColor(0, 0);  
   }
 }
 
@@ -240,7 +280,7 @@ void controlLoop();
  * settings() - Entry point for the settings menu.
  */
 void settings() {
-  for (int i=1; i < 5; i++) {
+  for (int i=1; i < 6; i++) {
     displayMode(i);
     delay(200);
   }
@@ -250,17 +290,20 @@ void settings() {
   Serial.println(selectedItem);
   switch (selectedItem) {
     case 1:
+      animateMenuSelect(strip.Color(255, 255, 0)); // Yellow, brightness
       brightnessSelect();
       break;
     case 2:
-      sizeSelect();
+      animateMenuSelect(strip.Color(255, 255, 0)); // Green, size
+      sizeSelect(); 
       break;
     case 3:
       // Red pill - Exit to control loop menu.
+      animateMenuSelect(strip.Color(255, 0, 0)); // Red, transmit specific mode
       controlLoop();
       break;
     default:
-      // Do nothing
+      animateMenuSelect(strip.Color(0, 0, 255)); // Blue, transmit specific mode
       break;
   }
 }
