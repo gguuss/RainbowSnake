@@ -65,7 +65,7 @@
         <div class="col-sm-6">
           <div class="input-group">
             <span class="input-group-addon" id="spanSize">25</span>
-            <input class="form-control" id="sizeInput" type="range" step="1" min="25" max="100" />
+            <input class="form-control" id="sizeInput" type="range" step="1" min="5" max="100" />
           </div>
         </div>
       </div>
@@ -208,10 +208,17 @@
         <!-- GPS -->
         <div class="form-group">
           <label class="col-sm-2 control-label">GPS</label>
-          <div class="col-sm-6">
+          <div class="col-sm-4">
+            <div style="display:none">
             Lat: <input id="latitude" type="text" class="form-control" />
             Long: <input id="longitude" type="text" class="form-control" />
+            </div>
+            <div id="gpsaccuracy" style="background-color: lightblue; width:1px">&nbsp;</div>
           </div>          
+          <div class="col-sm-2">          
+              <button type="button" class="btn btn-default" id="btnGpsSave">Save</button>
+              <button type="button" class="btn btn-default" id="btnGpsFind">Find</button>
+          </div>
         </div>
         <!-- End GPS -->
 
@@ -249,18 +256,20 @@
     <script>
     // Boilderplate code from W3Schools
     function updateGeo() {
+
       navigator.geolocation.getCurrentPosition(function(location) {
         document.getElementById('latLongConsole').innerText =
           'lat: ' + location.coords.latitude + '\n' +
           'long: ' + location.coords.longitude + '\n' +
-          'accuracy: ' +location.coords.accuracy;
+          'accuracy: ' + location.coords.accuracy;
 
         console.log(location.coords.latitude);
         console.log(location.coords.longitude);
         console.log(location.coords.accuracy);
-        $('latitude').val(location.coords.latitude);
-        $('longitude').val(location.coords.longitude);
-      });
+        $('#latitude').val(location.coords.latitude);
+        $('#longitude').val(location.coords.longitude);
+        $('#gpsaccuracy').width(150 - (location.coords.accuracy / 10));
+      }, function(e) {}, {enableHighAccuracy : true});
     }
     setInterval(function() { updateGeo(); }, 100);
 

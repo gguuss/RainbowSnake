@@ -26,6 +26,7 @@ FASTLED_USING_NAMESPACE
 extern "C" {
 #include "user_interface.h"
 }
+#include <stdlib.h>  // For strtod
 
 #include <ESP8266WebServer.h>
 #include <FS.h>
@@ -88,6 +89,18 @@ void sendSolidColor()
   json += ",\"g\":" + String(solidColor.g);
   json += ",\"b\":" + String(solidColor.b);
   json += "}";
+  server.send(200, "text/json", json);
+  json = String();
+}
+
+void sendLatLong(){  
+  char latitudeStr[64];  
+  char longitudeStr[64];  
+  dtostrf(latitude, 6, 15, latitudeStr);
+  dtostrf(longitude, 6, 15, longitudeStr);
+  
+  String json = String("{'lat':") + String(latitudeStr) + String(", 'long':") +
+      String(longitudeStr) + "}";
   server.send(200, "text/json", json);
   json = String();
 }
@@ -231,6 +244,25 @@ void sendPattern()
   json = String();
 }
 
+void loadSize() {
+  NUM_LEDS = EEPROM.read(5);
+  if (NUM_LEDS <= 0) {
+    NUM_LEDS = 25;
+  }
+  strip.updateLength(NUM_LEDS);
+}
+
+void saveSize() {
+  EEPROM.write(5, NUM_LEDS); // Store 
+  EEPROM.commit();
+}
+
+void saveLatLong() {
+  EEPROM.put(6, latitude);
+  EEPROM.put(6 + sizeof(double), longitude);
+  EEPROM.commit();
+}
+
 void loadSettings()
 {
   brightness = EEPROM.read(0);
@@ -240,9 +272,18 @@ void loadSettings()
   else if (currentPatternIndex >= patternCount)
     currentPatternIndex = patternCount - 1;
 
+  mode = currentPatternIndex;
+
   byte r = EEPROM.read(2);
   byte g = EEPROM.read(3);
   byte b = EEPROM.read(4);
+
+  EEPROM.get(6, latitude);
+  EEPROM.get(6 + sizeof(double), longitude);
+
+  // FIXME: 
+  // Loads size settings
+  // loadSize();
 
   if (r == 0 && g == 0 && b == 0)
   {
@@ -320,7 +361,7 @@ void adjustPattern(bool up)
 void setupServer(void) {
   EEPROM.begin(512);
   loadSettings();
-
+  
   Serial.println();
   Serial.print( F("Heap: ") ); Serial.println(system_get_free_heap_size());
   Serial.print( F("Boot Vers: ") ); Serial.println(system_get_boot_version());
@@ -329,7 +370,7 @@ void setupServer(void) {
   Serial.print( F("Chip ID: ") ); Serial.println(system_get_chip_id());
   Serial.print( F("Flash ID: ") ); Serial.println(spi_flash_get_id());
   Serial.print( F("Flash Size: ") ); Serial.println(ESP.getFlashChipRealSize());
-  Serial.print( F("Vcc: ") ); Serial.println(ESP.getVcc());
+  Serial.print( F("Vcc: ") ); Serial.println(ESP.getVcc());  
   Serial.println();
 
   SPIFFS.begin();
@@ -421,6 +462,30 @@ void setupServer(void) {
     String json = String(compassDir);
     server.send(200, "text/json", json);
     json = String();
+  });
+
+  server.on("/latlong", HTTP_GET, []() {
+    sendLatLong();
+  });
+  
+  server.on("/latlong", HTTP_POST, []() {
+    Serial.println("Post: latlong"); 
+    char latitudeStr[64];
+    server.arg("lat").toCharArray(latitudeStr,64);
+    char longitudeStr[64];
+    server.arg("long").toCharArray(longitudeStr, 64);
+    Serial.println(latitudeStr); 
+    Serial.println(longitudeStr); 
+    
+    latitude = strtod(latitudeStr, NULL);
+    longitude = strtod(longitudeStr, NULL);
+
+    dtostrf(latitude, 6, 15, latitudeStr);
+    dtostrf(longitude, 6, 15, longitudeStr);
+    
+    Serial.print("Lat/Long: "); Serial.print(latitudeStr); Serial.print("/"); Serial.println(longitudeStr);
+    saveLatLong();
+    sendLatLong();
   });
 
   server.on("/pattern", HTTP_GET, []() {

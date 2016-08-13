@@ -62,6 +62,10 @@ $("#btnPowerOff").click(function() {
   setPower(0);
 });
 
+$("#btnGpsSave").click(function() {
+	sendLatLong($('#latitude').val(), $('#longitude').val());
+});
+
 $('#gyroOn').click(function() {
     startMotionColor();
 });
@@ -253,6 +257,12 @@ function sendCompass(value) {
   $.post(urlBase + "compass?value=" + value, function(data) {
     $("#status").html("Set compass: " + data.name);
   });
+}
+
+function sendLatLong(lat, longitude) {
+  $.post(urlBase + "latlong?lat=" + lat + "&long=" + longitude, function(data) {
+    $("#status").html("Set latlong: " + data.name);
+  });	
 }
 
 function componentToHex(c) {

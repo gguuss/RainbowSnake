@@ -220,6 +220,7 @@ void updateSize(int currentSize) {
 
   
   NUM_LEDS = currentSize * 5;
+  saveSize();
   fastLedSetup();
 }
 

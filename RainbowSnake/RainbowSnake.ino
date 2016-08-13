@@ -72,7 +72,9 @@ void setup() {
 
   setupServer();
  
-  mode = notFast ? VEE_YOU : STACK_LIGHTS;
+  if (mode == 0) { // No mode from settings...loaded in setupServer
+    mode = notFast ? VEE_YOU : STACK_LIGHTS;
+  }
   //mode = numButtonClickerModes;
 
   // for testing notification

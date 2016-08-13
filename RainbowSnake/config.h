@@ -10,6 +10,7 @@ int peerCount = 0; // Mesh peer count global
 int compassDir = 0; // heading
 static bool hasModeswitch = true; // true
 boolean hasNotification = false;
+double latitude=0.0, longitude=0.0; // For GPS
 
 #define NUMM_MODES 9 // number of dotstar patterns
 int numModes = NUMM_MODES; // SEE below enum

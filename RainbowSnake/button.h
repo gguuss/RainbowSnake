@@ -3,6 +3,8 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
+#include <EEPROM.h>
+
 #ifndef NOT_FAST 
 boolean notFast = false;
 #endif
@@ -32,6 +34,10 @@ void changeMode() {
   if (mode == 2){
     mode++;
   }
+
+  // Store the current mode in EEPROM
+  EEPROM.write(1, mode);
+  EEPROM.commit();
 }
 
 void onePress(int count) {
