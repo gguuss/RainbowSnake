@@ -71,7 +71,7 @@ void setup() {
   fastLedSetup();
 
   setupServer();
-
+ 
   mode = notFast ? VEE_YOU : STACK_LIGHTS;
   //mode = numButtonClickerModes;
 
