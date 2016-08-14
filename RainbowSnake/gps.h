@@ -94,7 +94,7 @@ void distanceHome() {
     gpsColor = strip.Color(255, 255, 0); // Yellow, less close
     minDist = 25, maxDist = 100;
   } else if (meters  < 1000) {
-    gpsColor = strip.Color(255, 153, 51); // Orange, even less close
+    gpsColor = strip.Color(255, 20, 147); // Pink, even less close
     minDist = 100, maxDist = 1000;
   } // > 1 KM, you are fucked
 
