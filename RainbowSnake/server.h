@@ -70,7 +70,7 @@ uint8_t brightness = brightnessMap[brightnessIndex];
 
 void sendPower()
 {
-  String json = String(power);
+  String json = String("{'power':") + String(power) + String("}");
   server.send(200, "text/json", json);
   json = String();
 }

@@ -8,6 +8,7 @@ import com.loopj.android.http.RequestParams;
  * Created by Gus on 8/14/2016.
  */
 public class RainbowSnakeRestClient {
+    //private static final String BASE_URL = "http://192.168.1.105:8000/"; // For use with PostServer.py
     private static final String BASE_URL = "http://192.168.4.1/";
 
     private static AsyncHttpClient client = new AsyncHttpClient();
