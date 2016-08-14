@@ -20,9 +20,9 @@
         android:layout_height="wrap_content"
         android:text="SendGps"
         android:id="@+id/latlong"
-        android:layout_marginTop="78dp"
+        android:layout_marginTop="79dp"
         android:checked="false"
-        android:layout_below="@+id/toggleOffButton"
+        android:layout_below="@+id/compassButton"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
@@ -78,4 +78,34 @@
         android:layout_alignBottom="@+id/storePosTextView"
         android:layout_alignLeft="@+id/toggleOffButton"
         android:layout_alignStart="@+id/toggleOffButton" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Set GPS mode"
+        android:id="@+id/setGpsModeText"
+        android:layout_alignBaseline="@+id/compassButton"
+        android:layout_alignBottom="@+id/compassButton"
+        android:layout_alignRight="@+id/sendlatlonglabel"
+        android:layout_alignEnd="@+id/sendlatlonglabel" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Compass"
+        android:id="@+id/compassButton"
+        android:layout_below="@+id/savePositionButton"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="20dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Distance"
+        android:id="@+id/distButton"
+        android:layout_below="@+id/compassButton"
+        android:layout_alignLeft="@+id/compassButton"
+        android:layout_alignStart="@+id/compassButton" />
 </RelativeLayout>

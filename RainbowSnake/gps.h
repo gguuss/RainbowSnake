@@ -83,23 +83,31 @@ void distanceHome() {
   int meters = distanceKmeters * 1000;
 
   uint32_t gpsColor = strip.Color(255, 0, 0);
-  int limit = 0;
+  int minDist = 1000;
+  int maxDist = 2000;
   if (meters < 25) {
-    gpsColor = strip.Color(0, 255, 0);    
+    gpsColor = strip.Color(0, 255, 0); // Green, close    
     // TODO: somehow use all 25 LEDs
-    limit = 0;
+    minDist = 0;
+    maxDist = 25;
   } else if (meters  < 100) {
-    gpsColor = strip.Color(255, 255, 0);
-    limit = 25;
+    gpsColor = strip.Color(255, 255, 0); // Yellow, less close
+    minDist = 25, maxDist = 100;
   } else if (meters  < 1000) {
-    gpsColor = strip.Color(255, 128, 0);
-    limit = 100;
+    gpsColor = strip.Color(255, 153, 51); // Orange, even less close
+    minDist = 100, maxDist = 1000;
   } // > 1 KM, you are fucked
 
 
+  int range = maxDist - minDist;
+  int percent = ((meters - minDist) * 100) / range;
+  Serial.print("Dist Percent: "); Serial.println(percent);
+
+  int numLedsToDraw = strip.numPixels() * (percent / 100.0f);
+
   // Not so bright, guys
   strip.clear();
-  for (int i=0; i < strip.numPixels() / 2; i++){
+  for (int i=0; i < numLedsToDraw / 2 ; i++){
     strip.setPixelColor(i, gpsColor);
   }
   strip.show();

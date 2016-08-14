@@ -43,6 +43,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button buttonCompass = (Button) findViewById(R.id.compassButton);
+        buttonCompass.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.d(TAG, "Compass clicked");
+                setPattern(27);
+            }
+        });
+
+        Button buttonDist = (Button) findViewById(R.id.distButton);
+        buttonDist.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.d(TAG, "Dist clicked");
+                setPattern(28);
+            }
+        });
+
         ToggleButton toggleOff = (ToggleButton) findViewById(R.id.toggleOffButton);
         toggleOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -100,6 +116,30 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.d(TAG, "onCheckedChanged : " + isChecked);
                 toggleLocationUpdates(isChecked);
+            }
+        });
+    }
+
+    void setPattern(int patternIndex) {
+        Log.d(TAG, "Set pattern to: " + patternIndex);
+        RequestParams params = new RequestParams();
+        params.add("value", String.valueOf(patternIndex));
+        RainbowSnakeRestClient.post("pattern", params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                // If the response is JSONObject instead of expected JSONArray
+                Log.d(TAG, "Success, JSON OBJECT receieved");
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray timeline) {
+                // Pull out the first event on the public timeline
+                Log.d(TAG, "Success, JSON Array receieved");
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.d(TAG, "Failure: " + statusCode + " / " + responseString);
             }
         });
     }
