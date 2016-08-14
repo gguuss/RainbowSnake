@@ -209,7 +209,7 @@
         <div class="form-group">
           <label class="col-sm-2 control-label">GPS</label>
           <div class="col-sm-4">
-            <div style="display:none">
+            <div style="display:block">
             Lat: <input id="latitude" type="text" class="form-control" />
             Long: <input id="longitude" type="text" class="form-control" />
             </div>
@@ -218,6 +218,7 @@
           <div class="col-sm-2">          
               <button type="button" class="btn btn-default" id="btnGpsSave">Save</button>
               <button type="button" class="btn btn-default" id="btnGpsFind">Find</button>
+              <button type="button" class="btn btn-default" id="btnGpsStopFind">Stop find</button>
           </div>
         </div>
         <!-- End GPS -->
@@ -250,53 +251,6 @@
 
     </form>
   </div> <!-- END container -->
-    <!-- start gguuss code -->
-    <!-- Additions from for enabling sensors access to phone -->
-
-    <script>
-    // Boilderplate code from W3Schools
-    function updateGeo() {
-
-      navigator.geolocation.getCurrentPosition(function(location) {
-        document.getElementById('latLongConsole').innerText =
-          'lat: ' + location.coords.latitude + '\n' +
-          'long: ' + location.coords.longitude + '\n' +
-          'accuracy: ' + location.coords.accuracy;
-
-        console.log(location.coords.latitude);
-        console.log(location.coords.longitude);
-        console.log(location.coords.accuracy);
-        $('#latitude').val(location.coords.latitude);
-        $('#longitude').val(location.coords.longitude);
-        $('#gpsaccuracy').width(150 - (location.coords.accuracy / 10));
-      }, function(e) {}, {enableHighAccuracy : true});
-    }
-    setInterval(function() { updateGeo(); }, 100);
-
-    var onOrientationChange = function() {
-      var isPortrait = window.orientation % 180 === 0;
-      document.body.className = isPortrait ? 'portrait' : 'landscape';
-    }
-
-    window.addEventListener('orientationchange', onOrientationChange, false);
-    onOrientationChange();
-
-    var alpha,beta,gamma;
-    handleOrientationEvent = function(e) {
-
-      alpha = e.alpha,
-        beta = e.beta,
-        gamma = e.gamma;
-      document.getElementById('gyroConsole').innerText =
-        'Alpha: ' + alpha + '\n' +
-        'Beta: ' + beta + '\n' +
-        'Gamma: ' + gamma + '\n';
-    };
-
-    window.addEventListener('deviceorientation', handleOrientationEvent, false);
-    </script>
-  </div>
-  <!-- end gguuss code -->
   <script src="js/scripts.js"></script>
 </body>
 </html>

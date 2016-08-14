@@ -195,6 +195,7 @@ PatternAndNameList patterns = {
   { buttonClicker, "Button Clicker" },
   { growClicker, "Grow Clicker" },
   { compass, "Compass" },
+  { findHome, "Find Waypoint" },
   { countMeshNodes, "Count Mesh Nodes" },
   { showSolidColor, "Show Solid Color" }
 };
@@ -469,13 +470,10 @@ void setupServer(void) {
   });
   
   server.on("/latlong", HTTP_POST, []() {
-    Serial.println("Post: latlong"); 
     char latitudeStr[64];
     server.arg("lat").toCharArray(latitudeStr,64);
     char longitudeStr[64];
     server.arg("long").toCharArray(longitudeStr, 64);
-    Serial.println(latitudeStr); 
-    Serial.println(longitudeStr); 
     
     latitude = strtod(latitudeStr, NULL);
     longitude = strtod(longitudeStr, NULL);
@@ -483,9 +481,34 @@ void setupServer(void) {
     dtostrf(latitude, 6, 15, latitudeStr);
     dtostrf(longitude, 6, 15, longitudeStr);
     
-    Serial.print("Lat/Long: "); Serial.print(latitudeStr); Serial.print("/"); Serial.println(longitudeStr);
     saveLatLong();
     sendLatLong();
+  });
+
+  server.on("/currposition", HTTP_POST, []() {
+    Serial.println("currPos");
+    char latitudeStr[64];
+    server.arg("lat").toCharArray(latitudeStr,64);
+    char longitudeStr[64];
+    server.arg("long").toCharArray(longitudeStr, 64);
+
+    // Store relative lat/long and heading
+    currLat = strtod(latitudeStr, NULL);
+    currLong = strtod(longitudeStr, NULL);
+    compassDir = server.arg("heading").toInt();
+
+    
+
+    //Debug print difference vectors
+    dtostrf(currLat - latitude, 6, 15, latitudeStr);
+    dtostrf(currLong - longitude, 6, 15, longitudeStr);    
+    Serial.print("Lat/Long: "); Serial.print(latitudeStr); Serial.print("/"); Serial.println(longitudeStr);
+
+
+    // Return heading
+    String json = String(compassDir);
+    server.send(200, "text/json", json);
+    json = String();
   });
 
   server.on("/pattern", HTTP_GET, []() {

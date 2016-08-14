@@ -66,6 +66,15 @@ $("#btnGpsSave").click(function() {
 	sendLatLong($('#latitude').val(), $('#longitude').val());
 });
 
+$("#btnGpsFind").click(function() {
+	findHome = true;
+});
+
+$("#btnGpsStopFind").click(function() {
+  findHome = false;
+});
+
+
 $('#gyroOn').click(function() {
     startMotionColor();
 });
@@ -261,8 +270,15 @@ function sendCompass(value) {
 
 function sendLatLong(lat, longitude) {
   $.post(urlBase + "latlong?lat=" + lat + "&long=" + longitude, function(data) {
-    $("#status").html("Set latlong: " + data.name);
+    $("#status").html("Set latlong: " + data.lat + "/" + data.long);
   });	
+}
+
+
+function sendCurrLatLong(lat, longitude) {
+  $.post(urlBase + "currposition?lat=" + lat + "&long=" + longitude + "&heading=" + compassHeading, function(data) {
+    $("#status").html("Set currpos: " + JSON.stringify(data));
+  }); 
 }
 
 function componentToHex(c) {
@@ -367,3 +383,49 @@ function vuMeter() {
 	}
 }
 window.setTimeout(function() {vuMeter();}, 100);
+
+// Boilderplate code from W3Schools
+var findHome = false;
+function updateGeo() {
+
+  navigator.geolocation.getCurrentPosition(function(location) {
+    document.getElementById('latLongConsole').innerText =
+      'lat: ' + location.coords.latitude + '\n' +
+      'long: ' + location.coords.longitude + '\n' +
+      'accuracy: ' + location.coords.accuracy;
+
+    console.log(location.coords.latitude);
+    console.log(location.coords.longitude);
+    console.log(location.coords.accuracy);
+    $('#latitude').val(location.coords.latitude);
+    $('#longitude').val(location.coords.longitude);
+    $('#gpsaccuracy').width(150 - (location.coords.accuracy / 10));
+
+    if (findHome) {
+      sendCurrLatLong(location.coords.latitude, location.coords.longitude);
+    }
+  }, function(e) {}, {enableHighAccuracy : true});
+}
+setInterval(function() { updateGeo(); }, 300);
+
+var onOrientationChange = function() {
+  var isPortrait = window.orientation % 180 === 0;
+  document.body.className = isPortrait ? 'portrait' : 'landscape';
+}
+
+window.addEventListener('orientationchange', onOrientationChange, false);
+onOrientationChange();
+
+var alpha,beta,gamma;
+handleOrientationEvent = function(e) {
+
+  alpha = e.alpha,
+    beta = e.beta,
+    gamma = e.gamma;
+  document.getElementById('gyroConsole').innerText =
+    'Alpha: ' + alpha + '\n' +
+    'Beta: ' + beta + '\n' +
+    'Gamma: ' + gamma + '\n';
+};
+
+window.addEventListener('deviceorientation', handleOrientationEvent, false);

@@ -71,8 +71,10 @@ void setup() {
   fastLedSetup();
 
   setupServer();
- 
-  if (mode == 0) { // No mode from settings...loaded in setupServer
+
+  // 0 - No mode from settings...loaded in setupServer
+  // >numFastModes - you will not be able to change the mode with button
+  if (mode == 0 || mode > numFastModes) { 
     mode = notFast ? VEE_YOU : STACK_LIGHTS;
   }
   //mode = numButtonClickerModes;
@@ -96,6 +98,7 @@ void loop() {
   serverLoop();
   delay(0);
 
+  // FIXME: Remove middleware, use currentPatternIndex
   switch (mode) {
     case COLOR_MODES::ADA_LOOP:
       adaLoop();
@@ -196,6 +199,9 @@ void loop() {
     case COMPASS:
       compass();
       break;
+    case FINDWAYPOINT:
+      distanceHome();
+      break;      
     case BUTTON_MESHCOUNT:
       buttonCountMeshNodes();
       break;
