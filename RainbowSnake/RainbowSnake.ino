@@ -205,6 +205,9 @@ void loop() {
     case BUTTON_MESHCOUNT:
       buttonCountMeshNodes();
       break;
+    case VU_METER:
+      drawVu();
+      break;
     default:
       mode = 0;
       break;

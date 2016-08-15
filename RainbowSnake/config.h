@@ -12,6 +12,7 @@ static bool hasModeswitch = true; // true
 boolean hasNotification = false;
 double latitude=0.0, longitude=0.0; // For GPS stored position
 double currLat=0.0, currLong=0.0; // For GPS current position
+int vuPercent = 0;
 
 #define NUMM_MODES 9 // number of dotstar patterns
 int numModes = NUMM_MODES; // SEE below enum
@@ -53,9 +54,10 @@ enum COLOR_MODES {
   COMPASS = 27,
   FINDWAYPOINT = 28,
   BUTTON_MESHCOUNT = 29,
+  VU_METER = 30,
 
   // Caution!!! Must be last
-  SOLIDCOLOR = 30
+  SOLIDCOLOR = 31  
 };
 
 // TWEAK ME!!!

@@ -149,6 +149,29 @@ static void rainbowLove() {
   delay(SYSDELAY);
 }
 
+// -----------------------------------------------------------
+// Draws green -> red gradient for value % of the strip
+// -----------------------------------------------------------
+int vuDrawCounter = 0;
+static void drawVu() {
+  vuDrawCounter++;
+  if (vuDrawCounter % 10 == 0){
+    vuPercent -= 1; // push down the VUs
+  }
+  int limit = (strip.numPixels() * vuPercent) / 100;
+
+  // For green -> red gradient
+  int step = 255/strip.numPixels();
+
+  // UGH, power kills this one
+  strip.clear();
+  for (int i = 0; i < strip.numPixels() && i < limit; i++) {
+      strip.setPixelColor(i, 255 - (i*step), i*step, 0);
+  }
+  strip.show();
+  delay(SYSDELAY);
+}
+
 
 // -----------------------------------------------------------
 // Draws current brightness

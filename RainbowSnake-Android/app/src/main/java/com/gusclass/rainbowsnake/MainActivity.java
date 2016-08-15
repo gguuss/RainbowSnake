@@ -7,6 +7,10 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.AudioFormat;
+import android.media.AudioRecord;
+import android.media.MediaRecorder;
+import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +25,12 @@ import com.loopj.android.http.*;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import static java.lang.Math.*;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -58,6 +68,24 @@ public class MainActivity extends AppCompatActivity {
                 setPattern(28);
             }
         });
+
+        ToggleButton toggleVu = (ToggleButton) findViewById(R.id.vuButton);
+        toggleVu.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    Log.d(TAG, "Toggle VU to on");
+                    try {
+                        startVu();
+                    }catch (IOException ioe) {
+                        Log.e(TAG, "Couldn't start VU", ioe);
+                    }
+                } else {
+                    Log.d(TAG, "Toggle VU to off");
+                    stopVu();
+                }
+            }
+        });
+
 
         ToggleButton toggleOff = (ToggleButton) findViewById(R.id.toggleOffButton);
         toggleOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -143,6 +171,110 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private AudioRecord mRecorder = null;
+    AsyncTask<Integer, Integer, Void> apoll;
+    void startVu() throws IOException{
+        if (true) { //validateMicAvailability()) {
+
+            int mRecorderBufSize = AudioRecord.getMinBufferSize(44100,
+                    AudioFormat.CHANNEL_IN_MONO,
+                    AudioFormat.ENCODING_PCM_16BIT);
+            mRecorder = new AudioRecord(MediaRecorder.AudioSource.MIC,
+                    44100,
+                    AudioFormat.CHANNEL_IN_MONO,
+                    AudioFormat.ENCODING_PCM_16BIT,
+                    mRecorderBufSize);
+            mRecorder.startRecording();
+
+            apoll = new AudioPoll().execute(mRecorderBufSize);;
+        } else {
+            Log.d(TAG, "No mic available");
+        }
+    }
+    private class AudioPoll extends AsyncTask<Integer, Integer, Void> {
+        protected Void doInBackground(Integer... sizeInBytes) {
+            short[] buffer = new short[sizeInBytes[0]/2];
+            boolean status = true;
+            int shortsRead;
+
+            while (status && mRecorder.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING) {
+                if ((shortsRead = mRecorder.read(buffer, 0, buffer.length)) > 0) {
+                    int pmax = 1;
+                    int nmin = 0;
+                    final double LOG_2 = log(2.0);
+                    int i;
+
+                    // find the sample with the largest excursion in this slice
+                    for (i = 0; i < shortsRead; ++i) {
+                        if (buffer[i] > 0) {
+                            pmax = max(pmax, (int)buffer[i]);
+                        } else {
+                            nmin = min(nmin, (int)buffer[i]);
+                        }
+                    }
+                    nmin = -max(nmin, -((int)Short.MAX_VALUE)); // make sure nmin is in [0..Short.MAX_VALUE]
+                    pmax = max(pmax, nmin);
+
+                    double lb_pmax = log((double)pmax)/LOG_2; // lb_pmax [0..15)
+                    double c_lb_pmax = ceil(lb_pmax); // c_lb_pmax [0..15]
+                    publishProgress(Integer.valueOf(((int)c_lb_pmax+1)*2 - (int)round(c_lb_pmax - lb_pmax)));
+                } else if (shortsRead < 0) {
+                    // error
+                    publishProgress(Integer.valueOf(0));
+                    status = false;
+                } else {
+                    publishProgress(Integer.valueOf(0));
+                    status = false;
+                }
+            }
+            mRecorder = null;
+            return null;
+        }
+
+        int mThrottleCounter = 0;
+        static final int throttleLimit = 10;
+        protected void onProgressUpdate(Integer... progress) {
+            // Post it
+            RequestParams params = new RequestParams();
+            int vuValue = (progress[0] * 100) / 32; // scale between 0 ... 100
+            if (vuValue > 60) {
+                vuValue = (vuValue - 60); // squash to 0 ... 40
+                vuValue *= 100 / 30;
+            } else {
+                vuValue = 0;
+            }
+            params.add("value", String.valueOf(vuValue));
+            if (mThrottleCounter % throttleLimit == 0) {
+                RainbowSnakeRestClient.post("vumeter", params, new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        // If the response is JSONObject instead of expected JSONArray
+                        //Log.d(TAG, "Success, JSON OBJECT receieved");
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray timeline) {
+                        // Pull out the first event on the public timeline
+                        //Log.d(TAG, "Success, JSON Array receieved");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        //Log.d(TAG, "Failure: " + statusCode + " / " + responseString);
+                    }
+                });
+            }
+            mThrottleCounter++;
+        }
+    }
+
+    void stopVu() {
+        apoll.cancel(true);
+        mRecorder.stop();
+    }
+
+
 
     /* GPS Constant Permission */
     private static final int MY_PERMISSION_ACCESS_FINE_LOCATION = 12;

@@ -108,4 +108,26 @@
         android:layout_below="@+id/compassButton"
         android:layout_alignLeft="@+id/compassButton"
         android:layout_alignStart="@+id/compassButton" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Send VU Data"
+        android:id="@+id/sendVuTextbox"
+        android:layout_below="@+id/latlong"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="36dp" />
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="vuButton"
+        android:id="@+id/vuButton"
+        android:layout_alignBaseline="@+id/sendVuTextbox"
+        android:layout_alignBottom="@+id/sendVuTextbox"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:checked="false" />
 </RelativeLayout>

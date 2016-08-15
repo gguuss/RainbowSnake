@@ -197,6 +197,7 @@ PatternAndNameList patterns = {
   { compass, "Compass" },
   { findHome, "Find Waypoint" },
   { countMeshNodes, "Count Mesh Nodes" },
+  { drawVu, "VU Meter" },
   { showSolidColor, "Show Solid Color" }
 };
 const uint8_t patternCount = ARRAY_SIZE(patterns);
@@ -483,6 +484,15 @@ void setupServer(void) {
     
     saveLatLong();
     sendLatLong();
+  });
+
+  server.on("/vumeter", HTTP_POST, []() {
+    vuPercent = server.arg("value").toInt();
+    Serial.println("Received VU value : " + String(vuPercent));
+    String json = String("{vuValue: " + String(vuPercent) + "}");
+    server.send(200, "text/json", json);
+    json = String();
+    mode = VU_METER;    
   });
 
   server.on("/currposition", HTTP_POST, []() {
