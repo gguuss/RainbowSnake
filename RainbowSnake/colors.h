@@ -1,6 +1,6 @@
 /**
- * colors.h - LED pattern rendering code for Adafruit Neopixel driver.
- */
+   colors.h - LED pattern rendering code for Adafruit Neopixel driver.
+*/
 
 
 // -----------------------------------------------------------
@@ -31,7 +31,7 @@ static void sparkle() {
 }
 
 static void modeTweak(int currentMode) {
-  switch(currentMode){
+  switch (currentMode) {
     case COLOR_MODES::ADA_LOOP:
     case COLOR_MODES::RAINBOW_LOVE:
     case COLOR_MODES::MODE_TWEAK:
@@ -55,7 +55,7 @@ static void modeTweak(int currentMode) {
     case COLOR_MODES::RAINBOW:
     case COLOR_MODES::RAINBOW_ALL:
     default:
-      for (int i=0; i < 25; i++) {
+      for (int i = 0; i < 25; i++) {
         sparkle();
         delay(random(5, 15));
       }
@@ -78,14 +78,14 @@ static void basicChase() {
   if (++tail >= strip.numPixels()) tail = 0; // Increment, reset tail index
 }
 
-static void drawPeers(){
+static void drawPeers() {
   strip.clear();
-  
-  for (int i=0; i < peerCount; i++){
-    strip.setPixelColor(i, strip.Color(255,0,0));
+
+  for (int i = 0; i < peerCount; i++) {
+    strip.setPixelColor(i, strip.Color(255, 0, 0));
   }
   strip.show();
-  delay(0); 
+  delay(0);
 }
 
 // -----------------------------------------------------------
@@ -155,18 +155,18 @@ static void rainbowLove() {
 int vuDrawCounter = 0;
 static void drawVu() {
   vuDrawCounter++;
-  if (vuDrawCounter % 10 == 0){
+  if (vuDrawCounter % 10 == 0) {
     vuPercent -= 1; // push down the VUs
   }
   int limit = (strip.numPixels() * vuPercent) / 100;
 
   // For green -> red gradient
-  int step = 255/strip.numPixels();
+  int step = 255 / strip.numPixels();
 
   // UGH, power kills this one
   strip.clear();
   for (int i = 0; i < strip.numPixels() && i < limit; i++) {
-      strip.setPixelColor(i, 255 - (i*step), i*step, 0);
+    strip.setPixelColor(i, 255 - (i * step), i * step, 0);
   }
   strip.show();
   delay(SYSDELAY);
@@ -176,12 +176,12 @@ static void drawVu() {
 // -----------------------------------------------------------
 // Draws current brightness
 // -----------------------------------------------------------
-void showBrightness(){  
+void showBrightness() {
   clearPixels();
-  for (int i=0; i < defaultBrightness / 25; i++){
-    strip.setPixelColor(i, strip.Color(0,255,0));    
+  for (int i = 0; i < defaultBrightness / 25; i++) {
+    strip.setPixelColor(i, strip.Color(0, 255, 0));
     strip.show();
-    delay(SYSDELAY*5);
+    delay(SYSDELAY * 5);
   }
 }
 
@@ -189,9 +189,9 @@ void showBrightness(){
 // -----------------------------------------------------------
 // Increases current brightness
 // -----------------------------------------------------------
-void increaseBrightness(){
+void increaseBrightness() {
   defaultBrightness += 10;
-  if (defaultBrightness > 255){
+  if (defaultBrightness > 255) {
     defaultBrightness = 0;
   }
   strip.setBrightness(defaultBrightness); // 0...255
@@ -201,52 +201,52 @@ void increaseBrightness(){
 // -----------------------------------------------------------
 // Decreases current brightness
 // -----------------------------------------------------------
-void decreaseBrightness(){
+void decreaseBrightness() {
   defaultBrightness -= 10;
   strip.setBrightness(defaultBrightness); // 0...255s
 }
 
 
-static float hueStd=1.0;
-static float s=1.0;
-static float i=1.0;
+static float hueStd = 1.0;
+static float s = 1.0;
+static float i = 1.0;
 static void hsvLoop() {
 
-  hueStd+=5;
-  s+=5;
+  hueStd += 5;
+  s += 5;
   hsi2rgb(hueStd, s, i,  &color);
   strip.setPixelColor(head, color); // 'On' pixel at head
   strip.setPixelColor(tail, 0);     // 'Off' pixel at tail
   strip.show();                     // Refresh strip
   delay(SYSDELAY);                        // Pause 20 milliseconds (~50 FPS)
 
-  if(++head >= strip.numPixels()) {         // Increment head index.  Off end of strip?
+  if (++head >= strip.numPixels()) {        // Increment head index.  Off end of strip?
     head = 0;                       //  Yes, reset head index to start
     hsi2rgb(hueStd, s, i,  &color);
     strip.setPixelColor(head, color); // 'On' pixel at head
   }
-  if(++tail >= strip.numPixels()) tail = 0; // Increment, reset tail index
+  if (++tail >= strip.numPixels()) tail = 0; // Increment, reset tail index
 }
 
 
 // Loops the V-value
 int vLoopMode = 0;
 static void vLoop() {
-  switch(vLoopMode){  
+  switch (vLoopMode) {
     case 0:
-     hueStd+=10;
+      hueStd += 10;
       vLoopMode++;
       break;
     case 1:
-      s+=5;
-      if (s > 255){
+      s += 5;
+      if (s > 255) {
         s = 50;
         vLoopMode++;
       }
       break;
     case 2:
-      i+=5;
-      if (i > 255){
+      i += 5;
+      if (i > 255) {
         i = 50;
         vLoopMode = 0;
       }
@@ -258,12 +258,12 @@ static void vLoop() {
   strip.show();                     // Refresh strip
   delay(SYSDELAY);                  // Pause 20 milliseconds (~50 FPS)
 
-  if(++head >= strip.numPixels()) {         // Increment head index.  Off end of strip?
+  if (++head >= strip.numPixels()) {        // Increment head index.  Off end of strip?
     head = 0;                       //  Yes, reset head index to start
     hsi2rgb(hueStd, s, i,  &color);
     strip.setPixelColor(head, color); // 'On' pixel at head
   }
-  if(++tail >= strip.numPixels()) tail = 0; // Increment, reset tail index
+  if (++tail >= strip.numPixels()) tail = 0; // Increment, reset tail index
 }
 
 bool veeYouDirUp = true;
@@ -271,30 +271,30 @@ int veeYouWheel = 25;
 int gMod = 0;
 static void veeYou(int tick) {
   int mod = gMod;
-  if (veeYouDirUp && mod != 0){
-      mod = (strip.numPixels() / 2) - mod;
+  if (veeYouDirUp && mod != 0) {
+    mod = (strip.numPixels() / 2) - mod;
   }
-  for (int i=0; i < (strip.numPixels() / 2) + 1; i++){
+  for (int i = 0; i < (strip.numPixels() / 2) + 1; i++) {
     if (i < mod) {
       strip.setPixelColor(i, wheel(veeYouWheel));
-      strip.setPixelColor(strip.numPixels() - i, wheel(255-veeYouWheel));
+      strip.setPixelColor(strip.numPixels() - i, wheel(255 - veeYouWheel));
     } else {
       strip.setPixelColor(i, 0);
       strip.setPixelColor(strip.numPixels() - i, 0);
     }
   }
   gMod++;
-  if (gMod > strip.numPixels() / 2){
+  if (gMod > strip.numPixels() / 2) {
     veeYouDirUp = veeYouDirUp ? false : true;
     veeYouWheel += 25;
     veeYouWheel = veeYouWheel % 255;
     gMod = 0;
   }
   strip.show();
-  if (gBpm == 120){
+  if (gBpm == 120) {
     delayMicroseconds(random(5000, 50000));
   }
   // Use BPM counter
-  delay ((3600/gBpm) / (strip.numPixels() / 2));
+  delay ((3600 / gBpm) / (strip.numPixels() / 2));
 }
 
