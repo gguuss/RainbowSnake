@@ -104,6 +104,7 @@ void distanceHome() {
   Serial.print("Dist Percent: "); Serial.println(percent);
 
   int numLedsToDraw = strip.numPixels() * (percent / 100.0f);
+  numLedsToDraw += 2; // Don't leave people lonely without lights.
 
   // Not so bright, guys
   strip.clear();
