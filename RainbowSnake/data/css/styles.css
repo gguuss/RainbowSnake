@@ -273,3 +273,21 @@
 	width: 24px;
 	height: 24px;
 }
+
+#bpmBlinker {
+  font-size: 32px;
+  animation-iteration-count:infinite;
+  position: absolute;
+  right: -40px;
+  top: -5px;
+}
+
+@-webkit-keyframes blink {
+    from {font-size: 24px; color: red;}
+    to {font-size: 32px; color: white;}
+}
+
+@keyframes blink {
+    from {font-size: 24px; color: red;}
+    to {font-size: 32px; color: white;}
+}
