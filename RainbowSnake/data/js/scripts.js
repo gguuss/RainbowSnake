@@ -137,9 +137,42 @@ function updateSize() {
   });
 }
 
+var BPMCounter = {
+  _lastTap: new Date(),
+  bpm: 0,
+  _dt: 0.0,
+  _lastBlink: new Date(),
+  tap: function() {
+    var now = new Date();
+    if (this._dt > 0) {
+      this._dt = (this._dt + now - this._lastTap)/2.0;
+    } else {
+      this._dt = now - this._lastTap;
+    }
+    this._lastTap = now;
+    if (this._dt > 0 && this._dt < 4000) {
+      this.bpm = Math.round(60/(this._dt/1000));
+      $("#bpmInput").val(this.bpm).change();
+      updateBlink();
+    }
+  },
+  updateBlink: function(newBpm) {
+    if (newBpm) {
+      this.bpm = parseInt(newBpm);
+      this._dt = this.bpm * 1000 / 60;
+    }
+    blinkerStyle.innerHTML = ".blinking { animation-name: blink; animation-duration: " + this._dt + "ms;}";
+  }
+}
+
+$("#btnTapBpm").click(function() {
+  BPMCounter.tap.apply(BPMCounter);
+});
+
 function updateBpm() {
   $.post(urlBase + "bpm?value=" + $('#bpmInput').val()
         , function(data) {
+    BPMCounter.updateBlink(data);
     $("#status").html("Size now: " + data);
   });
 }
