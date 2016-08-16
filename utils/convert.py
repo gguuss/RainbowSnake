@@ -1,11 +1,13 @@
 #!/usr/bin/python
 from PIL import Image
-print "hello"
+import sys
+print "Processing: " + sys.argv[1]
+print "copy from here-------8<"
 
 def rgb2hex(r, g, b):
     return '0x{:02x}{:02x}{:02x}'.format(r, g, b)
 
-img = Image.open('sample.png')
+img = Image.open(sys.argv[1])
 
 hexString = ""
 
@@ -23,3 +25,4 @@ if img.mode in ('RGBA', 'LA') or (img.mode == 'P' and 'transparency' in img.info
         hexString += '},\n'
 
 print hexString
+print "\n------8<"
