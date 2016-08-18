@@ -10,7 +10,9 @@ enum POV_MODES {
   POV_DIAMONDS = 1,
   POV_SAW = 2, 
   POV_BMP = 3,
-  POV_BMP25 = 4
+  POV_BMP25 = 4,
+  POV_BMP16 = 5, 
+  POV_BMP16_FIRE = 6
 };
 
 // Renders a rainbow spiral
@@ -94,7 +96,7 @@ void bitmapLoop25(uint32_t bitmap[][25], int height) {
 
 unsigned long pictureLoopTime = 0;
 int povMode = 1;
-int numPovModes = 5;
+int numPovModes = 7;
 void pictureLoop() {
   if (pictureLoopTime == 0){
     pictureLoopTime = millis();
@@ -123,6 +125,12 @@ void pictureLoop() {
       break;
     case POV_BMP25:
       bitmapLoop25(bitmap25_fire, 25);
+      break;
+    case POV_BMP16:
+      bitmapLoop16(bitmap16_pride, 54);
+      break;
+    case POV_BMP16_FIRE:
+      bitmapLoop16(bitmap16_fire, 48);
       break;
   }
 
