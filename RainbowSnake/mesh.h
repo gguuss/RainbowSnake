@@ -1,3 +1,6 @@
+
+#ifndef WIFI_H
+#define WIFI_H
 /*
   mesh.h
   Wifi messaging that communicates to other APs in the "mesh".
@@ -22,8 +25,6 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-#ifndef WIFI_H
-#define WIFI_H
 
 String manageRequest(String request);
 #define SERVER_NAME "192.168.4.1"

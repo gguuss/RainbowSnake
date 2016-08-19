@@ -1,7 +1,8 @@
 /**
    colors.h - LED pattern rendering code for Adafruit Neopixel driver.
 */
-
+#ifndef COLORS_H
+#define COLORS_H
 
 // -----------------------------------------------------------
 // Sparkles the LEDs
@@ -298,3 +299,354 @@ static void veeYou(int tick) {
   delay ((3600 / gBpm) / (strip.numPixels() / 2));
 }
 
+// From Magic
+// Input a value 0 to 255 to get a color value.
+// The colours are a transition r - g - b - back to r.
+uint32_t Wheel(byte WheelPos) {
+  WheelPos = 255 - WheelPos;
+  if(WheelPos < 85) {
+   return strip.Color(255 - WheelPos * 3, 0, WheelPos * 3);
+  } else if(WheelPos < 170) {
+    WheelPos -= 85;
+   return strip.Color(0, WheelPos * 3, 255 - WheelPos * 3);
+  } else {
+   WheelPos -= 170;
+   return strip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
+  }
+}
+
+void lineHelperWithHeight(uint32_t c, uint8_t offset, uint8_t wrapSize, uint16_t height) {
+  uint16_t i;
+  
+  // Draw the line
+  for(i=strip.numPixels(); i > strip.numPixels() - height; i -= wrapSize) {
+    if (dir_trickle_up){
+      strip.setPixelColor(i + offset, c);
+    } else {
+      strip.setPixelColor(strip.numPixels() - (i + offset), c);
+    }
+  }
+}
+
+void lineHelper(uint32_t c, uint8_t offset, uint8_t wrapSize) {
+  uint16_t i;
+  
+  // Draw the line
+  lineHelperWithHeight(c, offset, wrapSize, strip.numPixels());  
+}
+
+// Fill the dots one after the other with a color
+void colorWipe(uint32_t c, uint8_t wait) {
+  for(uint16_t i=0; i<strip.numPixels(); i++) {
+      strip.setPixelColor(i, c);
+      strip.show();
+      delay(wait);
+  }
+}
+
+// Fill the dots one after the other with a color
+void fastColorWipe(uint32_t c, uint8_t showSpeed) {
+  #ifndef NOMOTION
+  //motionLoop();
+  #endif
+  if (dir_trickle_up) {
+    for(uint16_t i=0; i<strip.numPixels(); i++) {
+        strip.setPixelColor(i, c);
+        if (i % showSpeed == 0) {
+          strip.show();
+        }
+    }  
+  }else{
+    for(uint16_t i=strip.numPixels(); i > 0; i--) {
+        strip.setPixelColor(i, c);
+        if (i % showSpeed == 0) {
+          strip.show();
+        }
+    }      
+  }
+}
+
+void rainbow(uint8_t wait) {
+  uint16_t i, j;
+
+  for(j=0; j<256; j++) {
+    for(i=0; i<strip.numPixels(); i++) {
+      strip.setPixelColor(i, Wheel((i+j) & 255));
+    }
+    strip.show();
+    delay(wait);
+  }
+}
+
+
+//Theatre-style crawling lights.
+void theaterChase(uint32_t c, uint8_t wait) {
+  for (int j=0; j<10; j++) {  //do 10 cycles of chasing
+    for (int q=0; q < 3; q++) {
+      for (int i=0; i < strip.numPixels(); i=i+3) {
+        strip.setPixelColor(i+q, c);    //turn every third pixel on
+      }
+      strip.show();
+     
+      delay(wait);
+     
+      for (int i=0; i < strip.numPixels(); i=i+3) {
+        strip.setPixelColor(i+q, 0);        //turn every third pixel off
+      }
+      //if (isTrigger()) {
+      //  return;
+      //}
+    }
+  }
+}
+
+//Theatre-style crawling lights with rainbow effect
+void theaterChaseRainbow(uint8_t wait) {
+  for (int j=0; j < 256 && mode == 9; j++) {     // cycle all 256 colors in the wheel
+    //handleWifiRequest();
+    for (int q=0; q < 3; q++) {
+        for (int i=0; i < strip.numPixels(); i=i+3) {
+          strip.setPixelColor(i+q, Wheel( (i+j) % 255));    //turn every third pixel on
+        }
+        strip.show();
+       
+        delay(wait);
+       
+        for (int i=0; i < strip.numPixels(); i=i+3) {
+          strip.setPixelColor(i+q, 0);        //turn every third pixel off
+        }
+    }
+  }
+}
+
+// Draws a straight line
+void drawStraightLineHelper(uint32_t c, uint8_t offset) {
+  lineHelper(c, offset, 27);
+}
+
+
+void swirlLines(uint32_t c1, uint32_t c2, uint32_t c3, uint32_t c4, uint8_t wait){
+  // Clear the strip  
+  strip.clear();
+  
+  lineHelper(c1, 0, 4);
+  lineHelper(c2, 1, 4);
+  lineHelper(c3, 2, 4);
+  lineHelper(c4, 3, 4);  
+  delay(wait);  
+   
+  // Show the lines
+  strip.show();
+}
+
+void twistHelper(uint8_t minFudge, uint8_t maxFudge, uint8_t waitMin, uint8_t waitMax, int stepValue) {
+  uint8_t colorFudge;
+  for (colorFudge=minFudge; stepValue > 0 ? (colorFudge < maxFudge): (colorFudge > maxFudge); colorFudge += stepValue) {
+    if (colorFudge & 1) {
+      swirlLines(
+        Wheel(colorFudge),       // Color 1
+        0,                       // Color 2
+        Wheel(colorFudge + 16),  // Color 3
+        0,                       // Color 4
+        random(waitMin,waitMax));                     // Delay
+    } else{
+      swirlLines(
+        0,                       // Color 1
+        Wheel(colorFudge),       // Color 2
+        0,                       // Color 3
+        Wheel(colorFudge + 16),  // Color 4
+        random(waitMin,waitMax));                     // Delay
+    }
+  }
+}
+
+void fire(uint16_t heightMin, uint16_t heightFinish, uint8_t waitMin, uint8_t waitMax) {
+  uint16_t i, j, height, temp;
+  #ifndef NOMOTION
+  //motionLoop();
+  #endif
+    
+  strip.clear();
+  height = random(heightMin, heightFinish);
+  
+  // Note: This function is using global did_trickle_up that I'm assuming is set in the main loop.
+  //
+  if (dir_trickle_up){
+    for(i=0; i< strip.numPixels() && i < (height); i++) {      
+      temp = i / 8;
+      strip.setPixelColor(strip.numPixels() - i, strip.Color(127, temp, 0));
+    }
+    delay(0);
+  }else{
+    for(i=strip.numPixels() - 1; i > strip.numPixels() - height; i--) {      
+      temp = i / 8;
+      strip.setPixelColor(strip.numPixels() - i, strip.Color(127, temp, 0));
+    }
+    delay(0);
+  }
+  strip.show();
+  delay(random(waitMin, waitMax));
+}
+
+
+void vineHelper(uint32_t color, uint8_t offsetFudge) {
+  uint16_t growDelay = 50, vineSize1 = 0, vineSize2 = 0, vineSize3 = 0, vineSize4 = 0;
+  uint8_t vineGrowMin = 1, vineGrowMax = 4;
+
+  while (vineSize1 < strip.numPixels() && vineSize2 < strip.numPixels() && vineSize3 < strip.numPixels() && vineSize4 < strip.numPixels() ) {
+    lineHelperWithHeight(color, 0 + offsetFudge, 4, vineSize1);  // Color, offset, wrapsize, height
+    lineHelperWithHeight(color, 1 + offsetFudge, 4, vineSize2);  // Color, offset, wrapsize, height
+    lineHelperWithHeight(color, 2 + offsetFudge, 4, vineSize3);  // Color, offset, wrapsize, height
+    lineHelperWithHeight(color, 3 + offsetFudge, 4, vineSize4);  // Color, offset, wrapsize, height
+    
+    strip.show();
+    
+    vineSize1 += random(vineGrowMin, vineGrowMax);
+    vineSize2 += random(vineGrowMin, vineGrowMax*2);
+    vineSize3 += random(vineGrowMin, vineGrowMax);
+    vineSize4 += random(vineGrowMin, vineGrowMax*3);
+    //if (isTrigger()) {
+    //  return;
+    //}
+    delay(growDelay);    
+  }
+  delay(growDelay * 10);
+}
+
+
+void drawStraightLinesTestColor(){
+  uint8_t colorFudge, lineCounter;
+
+  strip.clear();
+  for (colorFudge=0; colorFudge < 255; colorFudge++) {
+    for (lineCounter = 0; lineCounter < 27; lineCounter+=3){
+      drawStraightLineHelper(Wheel(colorFudge + (lineCounter*5)), lineCounter);
+    }
+  }
+  strip.show();
+}
+
+
+void drawStraightLinesTest(){
+  uint8_t posFudge, lineCounter;
+
+  for (posFudge=0; posFudge < 27; posFudge++) {
+    strip.clear();
+    drawStraightLineHelper(strip.Color(127,172,127), posFudge);
+    drawStraightLineHelper(strip.Color(0,0,127), posFudge+4);
+    strip.show();
+    delay(60);
+  }
+}
+
+
+void chips(uint8_t wait){
+  uint8_t posFudge, lineCounter;
+
+  strip.clear();
+  drawStraightLineHelper(strip.Color(127,0,0), 0);
+  strip.show();
+  delay(wait);
+  
+  strip.clear();
+  drawStraightLineHelper(strip.Color(0,0,127), 13);
+  strip.show();
+  delay(wait);
+}
+
+void flash(uint32_t c, uint8_t wait) { 
+  strip.clear();
+  for(uint16_t i=0; i<strip.numPixels(); i++) {
+    strip.setPixelColor(i, c);
+  }
+  strip.show();
+  delay(wait);
+  strip.clear();
+  strip.show();
+}
+
+void fill(uint32_t c, uint8_t wait) { 
+  for(uint16_t i=0; i<strip.numPixels(); i++) {
+    strip.setPixelColor(i, c);
+  }
+  strip.show();
+  delay(wait);
+}
+
+
+void lightning(){
+  // TODO: For ... random # flashes ... 
+  flash(strip.Color(127,127,127), random(5, 10));
+  delay(random(25, 75));
+  flash(strip.Color(127,127,127), random(5, 10));
+  delay(random(25, 75));
+  flash(strip.Color(127,127,127), random(5, 10));
+  delay(random(1000, 5000));
+
+  flash(strip.Color(127,127,127), random(5, 10));
+  delay(random(25, 75));
+  flash(strip.Color(127,127,127), random(5, 10));
+  delay(random(1000, 5000));
+  
+  flash(strip.Color(127,127,127), random(5, 10));
+  delay(random(250, 5000));
+}
+
+// Slightly different, this makes the rainbow equally distributed throughout
+void rainbowCycle(uint8_t wait) {
+  uint16_t i, j;
+
+  for(j=0; j<256*5; j++) { // 5 cycles of all colors on wheel
+    for(i=0; i< strip.numPixels(); i++) {
+      strip.setPixelColor(i, Wheel(((i * 256 / strip.numPixels()) + j) & 255));
+    }
+    strip.show();
+    delay(wait);
+    //if (!isTrigger()){
+    //  break;
+    //}
+  }
+}
+
+
+// Slightly different, this makes the rainbow equally distributed throughout
+void ring(uint32_t c, uint8_t ringsize, bool addReverse, uint8_t wait) {
+  uint16_t i, j;
+  
+  #ifndef NOMOTION
+  //motionLoop();
+  #endif
+  for(i=0; i< strip.numPixels(); i += ringsize) {
+    strip.clear();
+    if (dir_trickle_up){    
+      for(j=0; j < ringsize; j++){
+        strip.setPixelColor(i+j, c);      
+      }
+    } else {
+      for(j=0; j < ringsize; j++){
+        strip.setPixelColor((strip.numPixels() - (i+j)), c);      
+      }
+    }
+    strip.show();
+    delay(wait);
+  }
+  
+  if (addReverse) {
+    strip.clear();
+    if (dir_trickle_up){
+      for(i; i > 0; i -= ringsize) {
+        for(j=0; j < ringsize; j++){
+          strip.setPixelColor(i+j, c);      
+        }
+      }
+    } else {
+      for(j=0; j < ringsize; j++){
+        strip.setPixelColor((strip.numPixels() - (i+j)), c);      
+      }
+    }
+    strip.show();
+    delay(wait);
+  }
+}
+
+#endif

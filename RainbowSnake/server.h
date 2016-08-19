@@ -1,3 +1,5 @@
+#ifndef SERVER_H
+#define SERVER_H
 /* server.h
  * All server properties and configuration forwarded to single page application.
  *
@@ -18,8 +20,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SERVER_H
-#define SERVER_H
 
 FASTLED_USING_NAMESPACE
 
@@ -198,6 +198,7 @@ PatternAndNameList patterns = {
   { findHome, "Find Waypoint" },
   { countMeshNodes, "Count Mesh Nodes" },
   { drawVu, "VU Meter" },
+  { drawVu, "Wizard Mode" },
   { showSolidColor, "Show Solid Color" }
 };
 const uint8_t patternCount = ARRAY_SIZE(patterns);

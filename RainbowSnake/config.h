@@ -1,6 +1,19 @@
+#ifndef CONFIG_H
+#define CONFIG_H
 /**
  *  LED / color / board Globals, I'm sorry.
  */
+
+// From Magic
+bool dir_trickle_up = false;
+void updateTrickleUp(float angle_y){
+  if (angle_y > 20){
+    dir_trickle_up = true;
+  } else if (angle_y < -20){
+    dir_trickle_up = false;
+  }
+}
+
 
 // Updates the mode to what's "next"
 // TODO: settings go here
@@ -17,7 +30,7 @@ int vuPercent = 0;
 #define NUMM_MODES 9 // number of dotstar patterns
 int numModes = NUMM_MODES; // SEE below enum
 int numFastModes = 24; // set to last fast value
-int numButtonClickerModes = 29; // set to number of clicker modes
+int numButtonClickerModes = 30; // set to number of clicker modes
 enum COLOR_MODES {
   // Adafruit modes
   ADA_LOOP = 0,
@@ -55,9 +68,10 @@ enum COLOR_MODES {
   FINDWAYPOINT = 28,
   BUTTON_MESHCOUNT = 29,
   VU_METER = 30,
+  WIZARD = 31,
 
   // Caution!!! Must be last
-  SOLIDCOLOR = 31  
+  SOLIDCOLOR = 32
 };
 
 // TWEAK ME!!!
@@ -72,12 +86,13 @@ int      head  = 0, tail = -10; // Index of first 'on' and 'off' pixels
 uint32_t color = 0xFF0000;      // 'On' color (starts red)
 
 // BOARD SETTINGS -- full configurations below
-//#define SETTINGS_WEMOS
+// lights not working?  make sure you have the right board uncommented
+#define SETTINGS_WEMOS // most common, if gguuss gave you one... this.
 //#define SETTINGS_ESP8266
 //#define SETTINGS_ADK
 //#define SETTINGS_NANO
 //#define SETTINGS_HUZZAH8266
-#define SETTINGS_HUZZAH8266_FIXED
+//#define SETTINGS_HUZZAH8266_FIXED
 
 
 // Settings correspond to WeMos/1Button
@@ -184,3 +199,4 @@ void checkNotify() {
     backOffCounter *= 2;
   }
 }
+#endif

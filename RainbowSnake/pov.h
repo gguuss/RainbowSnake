@@ -1,7 +1,10 @@
+#ifndef POV_H
+#define POV_H
 /**
  * pov.h
  * Persistance of vision (POV) patterns.
  */
+ 
 #include "bitmap.h"
 
 int row = 0;
@@ -145,4 +148,4 @@ void pictureLoop() {
   // draw hella fast
   delayMicroseconds(0);
 }
-
+#endif

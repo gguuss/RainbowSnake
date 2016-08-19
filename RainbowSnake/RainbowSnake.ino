@@ -23,6 +23,12 @@ String manageRequest(String request);
 // server
 #include "server.h"
 
+//Magic staff/stick
+#include "mpu.h"
+#include "tests.h"
+#include "magicstick.h"
+
+
 // plz fix, ordering matters.
 // Everything needs an ifndef, basically
 #include "mesh.h"
@@ -48,7 +54,7 @@ void setup() {
       rainbow(); // vary colors as much as possible
     }
   #endif
-
+  
   #ifdef NOMODESWITCH
   hasModeswitch = false;
   #endif
@@ -56,17 +62,27 @@ void setup() {
   Serial.begin(115200);
 
   strip.begin(); // Initialize pins for output
+  strip.setBrightness(30);
   strip.show();  // Turn all LEDs off ASAP
   // TODO: Boot animation
   for (int i=0; i < strip.numPixels() / 2; i++){
     veeYou(i);
   }
-  delay(500);
+  delay(3000);
 
   // not sure about this one...
   // used for the button
   //pinMode(MODE_PIN, INPUT);
   pinMode(MODE_PIN, INPUT_PULLUP);
+
+  // test out old staff stuff
+  //#define MAGICTEST
+  #ifdef MAGICTEST
+  while (true){
+    magicLoop();    
+  }
+  #endif
+
 
   fastLedSetup();
 
@@ -207,6 +223,9 @@ void loop() {
       break;
     case VU_METER:
       drawVu();
+      break;
+    case WIZARD:
+      magicLoop();
       break;
     default:
       mode = 0;

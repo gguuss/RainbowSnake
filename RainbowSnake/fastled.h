@@ -1,3 +1,5 @@
+#ifndef FASTLED_H
+#define FASTLED_H
 /**
  * fastled.h - FastLed Patterns, doesn't work on all boards, Feather needs to not use pin 16
  */
@@ -584,3 +586,4 @@ void palettetest()
   startindex--;
   fill_palette( leds, NUM_LEDS, startindex, (256 / NUM_LEDS) + 1, gCurrentPalette, 255, LINEARBLEND);
 }
+#endif
