@@ -1,5 +1,5 @@
 bDrawHat = true;
-bDrawOuterCylinder = true;
+bDrawOuterCylinder = false;
 bDrawInnerCylinder = false;
 
 // Inner cylinder
@@ -17,7 +17,8 @@ outerCylinderOuter = outerCylinderHole + 2;
 // Hat
 hatInnerCylinderSize = outerCylinderOuter + 1;
 hatOuterCylinderSize = hatInnerCylinderSize + 2;
-topSize = innerCylinderInner / 3;
+hatHeight = innerHeight / 2 + 10;
+topSize = innerCylinderInner / 2;
 
 
 if (bDrawInnerCylinder) {
@@ -30,7 +31,7 @@ if (bDrawOuterCylinder) {
 }
 
 if (bDrawHat){
-    translate([0,0,-20])
+    translate([0,0,70])
         drawHat();
 }
 
@@ -56,7 +57,7 @@ module drawOuterCylinder() {
             cylinder(r1=outerCylinderOuter, r2=outerCylinderOuter, h=innerHeight + 5);
             // TODO: screw part?
             rotate([90,0,0])
-                translate([0,50,-38])
+                translate([0,53,-38])
                 cylinder(r1=3, r2=3, innerCylinderOuter * 3);
         }
         translate([0,0,2])
@@ -68,17 +69,15 @@ module drawHat() {
     // section that screws in
     difference() {
         union() {
-            cylinder(r1=hatOuterCylinderSize, r2=hatOuterCylinderSize, h=innerHeight / 2);
-            translate([0,0,innerHeight / 2])
-                cylinder(r1=hatInnerCylinderSize, r2=topSize, h=innerHeight / 2);
-                        translate([0,0,innerHeight / 2])
-            translate([0,0,(innerHeight/2 - 5)])
-                cylinder(r1=topSize + 5, r2=topSize*2 /3, h=15);    
+            cylinder(r1=hatOuterCylinderSize, r2=hatOuterCylinderSize, h=hatHeight);
+            translate([0,0,hatHeight])
+                cylinder(r1=hatInnerCylinderSize, r2=topSize, h=hatHeight);
+
     
         }
         translate([0,0,-2])
-            cylinder(r1=hatInnerCylinderSize, r2=hatInnerCylinderSize, h=innerHeight / 2);       
-        translate([0,50,innerHeight])
+            cylinder(r1=hatInnerCylinderSize, r2=hatInnerCylinderSize, h=hatHeight);       
+        translate([0,50,hatHeight + 25])
             rotate([90, 0, 0])
                 cylinder(r1=topSize * 2 / 3, r2=topSize * 2 / 3, h=150);
         
