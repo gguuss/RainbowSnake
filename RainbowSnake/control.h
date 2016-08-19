@@ -1,3 +1,5 @@
+#ifndef CONTROL_H
+#define CONTROL_H
 /**
  * Control.h - For mmass control of LED mesh
  */
@@ -57,4 +59,4 @@ void controlLoop() {
   updateMeshMode();
   updateMeshMode();
 }
-
+#endif

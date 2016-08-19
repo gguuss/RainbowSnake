@@ -1,3 +1,5 @@
+#ifndef GPS_H
+#define GPS_H
 /**
  * gps.h - All GPS related functions
  */
@@ -144,3 +146,4 @@ void findHome() {
   strip.show();
   delay(20);
 }
+#endif

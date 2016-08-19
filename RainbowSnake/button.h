@@ -117,7 +117,7 @@ void checkModeButton() {
     float buttonState = digitalRead(MODE_PIN);
 
     // check if the pushbutton is pressed.
-    // if it is, the buttonState is HIGH:
+    // if it is, the buttonState is LOW:
     if (buttonState != HIGH) {
       hasNotification = false;
       Serial.println("Button triggered.");
