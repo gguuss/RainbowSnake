@@ -1,6 +1,6 @@
-bDrawHat = false;
-bDrawOuterCylinder = false;
-bDrawInnerCylinder = true;
+bDrawHat = true;
+bDrawOuterCylinder = true;
+bDrawInnerCylinder = false;
 
 // Inner cylinder
 innerHeight=50;
@@ -30,7 +30,7 @@ if (bDrawOuterCylinder) {
 }
 
 if (bDrawHat){
-    translate([0,0,70])
+    translate([0,0,-20])
         drawHat();
 }
 
@@ -38,10 +38,12 @@ if (bDrawHat){
 module drawInnerCylinder() {
     difference() {
         union() {
-            cylinder(r1=innerCylinderOuter+innerCylinderBevel, r2=innerCylinderOuter + innerCylinderBevel, h=innerHeight / 10);
+            cylinder(r1=innerCylinderOuter+innerCylinderBevel, 
+                r2=innerCylinderOuter + innerCylinderBevel, h=innerHeight / 10);
             cylinder(r1=innerCylinderOuter, r2=innerCylinderOuter, h=innerHeight);
             translate([0,0,innerHeight - (innerHeight / 10)])
-                cylinder(r1=innerCylinderOuter+innerCylinderBevel, r2=innerCylinderOuter+innerCylinderBevel, h=innerHeight / 10);
+                cylinder(r1=innerCylinderOuter+innerCylinderBevel, 
+                    r2=innerCylinderOuter+innerCylinderBevel, h=innerHeight / 10);
         }
         translate([0,0,2])
             cylinder(r1=innerCylinderInner, r2=innerCylinderInner, h=innerHeight);        
@@ -55,7 +57,7 @@ module drawOuterCylinder() {
             // TODO: screw part?
             rotate([90,0,0])
                 translate([0,50,-38])
-                cylinder(r1=4, r2=4, innerCylinderOuter * 3);
+                cylinder(r1=3, r2=3, innerCylinderOuter * 3);
         }
         translate([0,0,2])
             cylinder(r1=outerCylinderHole, r2=outerCylinderHole, h=innerHeight + 5);
@@ -80,18 +82,19 @@ module drawHat() {
             rotate([90, 0, 0])
                 cylinder(r1=topSize * 2 / 3, r2=topSize * 2 / 3, h=150);
         
-        translate([1, 30, -2])
+        // Side A slider
+        translate([-3, 30, -2])
           cube([6, 10, 20]);        
-        
-        translate([-1, -38, -2])
-          cube([6, 10, 20]);
-        
-        // 
-        translate([-13, 30, 22])
+        translate([-17, 30, 22])
             rotate([0, 90,0])
                 cube([6, 10, 20]);
         
-        translate([-1, -38, 22])
+        
+        // Side B slider
+        translate([-3, -38, -2])
+          cube([6, 10, 20]);
+        
+        translate([-3, -38, 22])
             rotate([0, 90,0])
                 cube([6, 10, 20]);    
     }
