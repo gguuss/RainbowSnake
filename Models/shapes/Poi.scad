@@ -16,7 +16,7 @@ outerCylinderOuter = outerCylinderHole + 2;
 
 // Hat
 hatInnerCylinderSize = outerCylinderOuter + 1;
-hatOuterCylinderSize = hatInnerCylinderSize + 2;
+hatOuterCylinderSize = hatInnerCylinderSize + 4; // beefy
 hatHeight = innerHeight / 2 + 10;
 topSize = innerCylinderInner / 2;
 
@@ -71,12 +71,19 @@ module drawHat() {
         union() {
             cylinder(r1=hatOuterCylinderSize, r2=hatOuterCylinderSize, h=hatHeight);
             translate([0,0,hatHeight])
-                cylinder(r1=hatInnerCylinderSize, r2=topSize, h=hatHeight);
+                cylinder(r1=hatOuterCylinderSize, r2=topSize, h=hatHeight);
 
     
         }
+        // Hollow inner
         translate([0,0,-2])
             cylinder(r1=hatInnerCylinderSize, r2=hatInnerCylinderSize, h=hatHeight);       
+        
+        // Hollow top
+        translate([0,0,hatHeight - 3])
+            cylinder(r1=hatInnerCylinderSize, r2=topSize - 5, h=hatHeight - 5);
+
+        
         translate([0,50,hatHeight + 25])
             rotate([90, 0, 0])
                 cylinder(r1=topSize * 2 / 3, r2=topSize * 2 / 3, h=150);
