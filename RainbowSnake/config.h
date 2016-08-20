@@ -114,7 +114,7 @@ Adafruit_DotStar strip = Adafruit_DotStar(
 #define NUMPIXELS  25 // Number of LEDs in strip
 #define DATAPIN    14
 #define CLOCKPIN   12
-#define SYSDELAY   500
+#define SYSDELAY   50
 #define NOMODESWITCH
 Adafruit_DotStar strip = Adafruit_DotStar(
   NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_GBR);

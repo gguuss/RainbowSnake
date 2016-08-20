@@ -54,7 +54,7 @@ void elements () {
 int magicTick = 0;
 void inputTester() {  // for debug
   while(true){
-    if (analogRead(D7) == 0){ // TRIGGER
+    if (analogRead(MODE_PIN) == 0){ // TRIGGER
       delay(50);
       //rainbowCycle(magicTick++);
       Serial.println("HI");
