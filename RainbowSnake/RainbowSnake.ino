@@ -24,10 +24,12 @@ String manageRequest(String request);
 #include "server.h"
 
 //Magic staff/stick
-#include "mpu.h"
+#include "mpu.h" 
 #include "tests.h"
 #include "magicstick.h"
 
+// POI- emulation of flowtoys pod poi
+#include "poi.h"
 
 // plz fix, ordering matters.
 // Everything needs an ifndef, basically
@@ -79,7 +81,7 @@ void setup() {
   //#define MAGICTEST
   #ifdef MAGICTEST
   while (true){
-    magicLoop();    
+    magicLoop();
   }
   #endif
 
@@ -226,6 +228,9 @@ void loop() {
       break;
     case WIZARD:
       magicLoop();
+      break;
+    case POI:
+      poiLoop();
       break;
     default:
       mode = 0;

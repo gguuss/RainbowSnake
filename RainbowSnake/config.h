@@ -1,15 +1,15 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 /**
- *  LED / color / board Globals, I'm sorry.
- */
+    LED / color / board Globals, I'm sorry.
+*/
 
 // From Magic
 bool dir_trickle_up = false;
-void updateTrickleUp(float angle_y){
-  if (angle_y > 20){
+void updateTrickleUp(float angle_y) {
+  if (angle_y > 20) {
     dir_trickle_up = true;
-  } else if (angle_y < -20){
+  } else if (angle_y < -20) {
     dir_trickle_up = false;
   }
 }
@@ -23,14 +23,14 @@ int peerCount = 0; // Mesh peer count global
 int compassDir = 0; // heading
 static bool hasModeswitch = true; // true
 boolean hasNotification = false;
-double latitude=0.0, longitude=0.0; // For GPS stored position
-double currLat=0.0, currLong=0.0; // For GPS current position
+double latitude = 0.0, longitude = 0.0; // For GPS stored position
+double currLat = 0.0, currLong = 0.0; // For GPS current position
 int vuPercent = 0;
 
 #define NUMM_MODES 9 // number of dotstar patterns
 int numModes = NUMM_MODES; // SEE below enum
 int numFastModes = 24; // set to last fast value
-int numButtonClickerModes = 30; // set to number of clicker modes
+int numButtonClickerModes = 32; // set to number of clicker modes
 enum COLOR_MODES {
   // Adafruit modes
   ADA_LOOP = 0,
@@ -69,9 +69,10 @@ enum COLOR_MODES {
   BUTTON_MESHCOUNT = 29,
   VU_METER = 30,
   WIZARD = 31,
+  POI = 32,
 
   // Caution!!! Must be last
-  SOLIDCOLOR = 32
+  SOLIDCOLOR = 33
 };
 
 // TWEAK ME!!!
@@ -92,7 +93,7 @@ uint32_t color = 0xFF0000;      // 'On' color (starts red)
 //#define SETTINGS_ADK
 //#define SETTINGS_NANO
 //#define SETTINGS_HUZZAH8266
-//#define SETTINGS_HUZZAH8266_FIXED
+//#define SETTINGS_HUZZAH8266_FIXED // Hats, shoes, poi
 
 
 // Settings correspond to WeMos/1Button
@@ -103,7 +104,7 @@ uint32_t color = 0xFF0000;      // 'On' color (starts red)
 #define CLOCKPIN   D7
 #define SYSDELAY   50
 Adafruit_DotStar strip = Adafruit_DotStar(
-  NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_BGR);
+                           NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_BGR);
 #endif
 //______________End WeMos settings
 
@@ -117,7 +118,7 @@ Adafruit_DotStar strip = Adafruit_DotStar(
 #define SYSDELAY   50
 #define NOMODESWITCH
 Adafruit_DotStar strip = Adafruit_DotStar(
-  NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_GBR);
+                           NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_BRG);
 #endif
 //______________End ESP8266 settings
 
@@ -131,7 +132,7 @@ Adafruit_DotStar strip = Adafruit_DotStar(
 #define SYSDELAY   500
 #define NOMODESWITCH
 Adafruit_DotStar strip = Adafruit_DotStar(
-  NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_GBR);
+                           NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_GBR);
 #endif
 //______________End ESP8266 settings
 
@@ -143,7 +144,7 @@ Adafruit_DotStar strip = Adafruit_DotStar(
 #define CLOCKPIN   5
 #define SYSDELAY   20
 Adafruit_DotStar strip = Adafruit_DotStar(
-  NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_BRG);
+                           NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_BRG);
 #endif
 //______________End NANO settings
 
@@ -155,7 +156,7 @@ Adafruit_DotStar strip = Adafruit_DotStar(
 #define CLOCKPIN   12
 #define SYSDELAY   50
 Adafruit_DotStar strip = Adafruit_DotStar(
-  NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_RGB);
+                           NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_RGB);
 
 #endif
 //______________End ADK settings
@@ -164,30 +165,30 @@ Adafruit_DotStar strip = Adafruit_DotStar(
 
 
 /**
- * Notification loop, exponentially backs off
- */
+   Notification loop, exponentially backs off
+*/
 unsigned long lastNotification = 0;
 int backOffCounter = 2;
 
 /**
- * Resets notofication variables.
- */
+   Resets notofication variables.
+*/
 void resetNotify() {
   lastNotification = 0;
   backOffCounter = 2;
 }
 
 /**
- * Exponentially backing off pattern that notifies the user
- * that they have been notified.
- */
+   Exponentially backing off pattern that notifies the user
+   that they have been notified.
+*/
 void checkNotify() {
   uint32_t colors[] = {0xFF0000, 0x00FF00, 0x0000FF};
-  if (hasNotification && ((millis() - lastNotification) > backOffCounter*1000) ) {
+  if (hasNotification && ((millis() - lastNotification) > backOffCounter * 1000) ) {
     strip.clear();
-    for (int i=0; i < 6; i++){
-      for (int j=0; j < 3; j++) {
-          strip.setPixelColor(j, colors[i%3]);
+    for (int i = 0; i < 6; i++) {
+      for (int j = 0; j < 3; j++) {
+        strip.setPixelColor(j, colors[i % 3]);
       }
       strip.show();
       delay(100);

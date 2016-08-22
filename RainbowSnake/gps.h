@@ -52,6 +52,39 @@ bool compassInTarget(int target) {
 }
 
 void compass() {
+  // Triangle math
+  //             pDest
+  //            /|
+  //           / | Long 
+  //          /  |
+  //     pcurr----
+  //           lat
+  //
+  // SOHCAHTOA
+  // Opposite = long
+  // Adjacent = lat
+  // Tan(phi) = long/lat
+  // Angle = atan(lat/long)
+  // calculate waypoint for dest  
+  double diffLong = longitude - currLong;
+  double diffLat = latitude - currLat;
+  // Rads = degs for compass
+  double coord1 = cos(latitude) * sin(diffLong);
+  double coord2 = cos(currLat) * sin(latitude) - sin(currLat) * cos(latitude) * cos(diffLong);  
+  double rads = atan(coord1 / coord2);
+  int degs98 = (rads * 4068) / 71;
+
+  // debugging
+  char latitudeStr[64];
+  char longitudeStr[64];
+  dtostrf(diffLat, 6, 15, latitudeStr);
+  dtostrf(diffLong, 6, 15, longitudeStr);
+  Serial.print("Lat Diff: "); Serial.println(latitudeStr);
+  Serial.print("Long Diff: "); Serial.println(longitudeStr);
+
+
+  Serial.println(degs98);
+  
   for (int i=0; i < strip.numPixels(); i++) {
     if (compassInTarget(0 + i - (strip.numPixels() / 2))) { // North
       strip.setPixelColor(i, 255, 0, 0);
@@ -61,6 +94,11 @@ void compass() {
       strip.setPixelColor(i, 255, 255, 255);
     } else if (compassInTarget(270 + i - (strip.numPixels() / 2))) { // East
       strip.setPixelColor(i, 0, 0, 255);
+    } else if (compassInTarget(degs98 + i - (strip.numPixels() / 2))) { // Waypoint
+      strip.setPixelColor(i, 255, 0, 0);
+      if (i > 1){
+        strip.setPixelColor(i-1, 255, 255, 0);
+      }
     } else {
       strip.setPixelColor(i, 0, 0, 0);  
     }

@@ -53,6 +53,8 @@ uint8_t patternIndex = 0;
 uint8_t currentPatternIndex = 0; // Index number of which pattern is current
 
 CRGB solidColor = CRGB::Blue;
+uint32_t poiColor1 = 0xFF0000;
+uint32_t poiColor2 = 0xFFFF00;
 
 uint8_t power = 1;
 
@@ -199,6 +201,7 @@ PatternAndNameList patterns = {
   { countMeshNodes, "Count Mesh Nodes" },
   { drawVu, "VU Meter" },
   { drawVu, "Wizard Mode" },
+  { drawVu, "POI" },
   { showSolidColor, "Show Solid Color" }
 };
 const uint8_t patternCount = ARRAY_SIZE(patterns);
@@ -228,7 +231,9 @@ void setSolidColor(uint8_t r, uint8_t g, uint8_t b)
   EEPROM.write(3, g);
   EEPROM.write(4, b);
 
-  setPattern(patternCount - 1);
+  if (mode != POI) {
+    setPattern(patternCount - 1);
+  }
 }
 
 
@@ -449,10 +454,14 @@ void setupServer(void) {
     sendSolidColor();
   });
 
+  
+
   server.on("/solidColor", HTTP_POST, []() {
     String r = server.arg("r");
     String g = server.arg("g");
     String b = server.arg("b");
+    poiColor2 = poiColor1;
+    poiColor1 = strip.Color(r.toInt(), g.toInt(), b.toInt());
     setSolidColor(r.toInt(), g.toInt(), b.toInt());
     sendSolidColor();
   });
