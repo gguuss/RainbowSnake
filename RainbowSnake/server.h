@@ -257,7 +257,9 @@ void loadSize() {
   if (NUM_LEDS <= 0) {
     NUM_LEDS = 25;
   }
+  #ifndef FAST_NEOPIXEL
   strip.updateLength(NUM_LEDS);
+  #endif
 }
 
 void saveSize() {
@@ -581,7 +583,9 @@ void setupServer(void) {
   server.on("/size", HTTP_POST, []() {
     String value = server.arg("value");
     NUM_LEDS = value.toInt();
+    #ifndef FAST_NEOPIXEL
     strip.updateLength(NUM_LEDS);
+    #endif
     fastLedSetup();
 
     String json = String("{\"size\":") + String(NUM_LEDS) + String("}");

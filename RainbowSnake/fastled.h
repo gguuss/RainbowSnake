@@ -10,10 +10,10 @@
 //#define LED_TYPE    APA102
 #define LED_TYPE DOTSTAR
 #define COLOR_ORDER BGR
-int NUM_LEDS = 25;
+int NUM_LEDS = 50;
 CRGB* leds;
 byte* heat;
-#define BRIGHTNESS  200
+#define BRIGHTNESS  60
 #define FRAMES_PER_SECOND 60
 
 bool gReverseDirection = false;
@@ -40,8 +40,12 @@ void fastLedSetup() {
   heat = new byte[NUM_LEDS];
 
   Serial.println("fastled setup");
-  
+  #ifdef FAST_NEOPIXEL
+  FastLED.addLeds<WS2811,DATA_PIN,RGB>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
+  #endif
+  #ifndef FAST_NEOPIXEL
   FastLED.addLeds<LED_TYPE,DATA_PIN,CLK_PIN,COLOR_ORDER, DATA_RATE_MHZ(24)>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
+  #endif
   FastLED.setBrightness( BRIGHTNESS );
   
 

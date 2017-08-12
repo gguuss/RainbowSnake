@@ -5,6 +5,7 @@
 
 #include <ESP8266WiFi.h>
 String manageRequest(String request);
+#include <Adafruit_NeoPixel.h>
 #include <Adafruit_DotStar.h>
 
 #define FASTLED_FORCE_SOFTWARE_SPI
@@ -64,7 +65,7 @@ void setup() {
   Serial.begin(115200);
 
   strip.begin(); // Initialize pins for output
-  strip.setBrightness(30);
+  strip.setBrightness(20);
   strip.show();  // Turn all LEDs off ASAP
   // TODO: Boot animation
   for (int i=0; i < strip.numPixels() / 2; i++){

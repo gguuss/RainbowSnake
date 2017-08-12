@@ -88,7 +88,8 @@ uint32_t color = 0xFF0000;      // 'On' color (starts red)
 
 // BOARD SETTINGS -- full configurations below
 // lights not working?  make sure you have the right board uncommented
-#define SETTINGS_WEMOS // most common, if gguuss gave you one... this.
+//#define SETTINGS_WEMOS // most common, if gguuss gave you one... this.
+#define SETTINGS_WEMOS_NEOPIXEL // most common, if gguuss gave you one... this.
 //#define SETTINGS_ESP8266
 //#define SETTINGS_ADK
 //#define SETTINGS_NANO
@@ -108,6 +109,16 @@ Adafruit_DotStar strip = Adafruit_DotStar(
 #endif
 //______________End WeMos settings
 
+// Settings correspond to WeMos/1Button
+#ifdef SETTINGS_WEMOS_NEOPIXEL
+#define MODE_PIN   D3  // mode select pin connected to ground
+#define NUMPIXELS  50 // Number of LEDs in strip
+#define DATAPIN    D6
+#define SYSDELAY   50
+#define FAST_NEOPIXEL true
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUMPIXELS, DATAPIN, NEO_RGB + NEO_KHZ800);
+#endif
+//______________End WeMos settings
 
 // Settings correspond to HUZZAH 8266
 #ifdef SETTINGS_HUZZAH8266_FIXED
