@@ -93,8 +93,8 @@ void setup() {
 
   // 0 - No mode from settings...loaded in setupServer
   // >numFastModes - you will not be able to change the mode with button
-  if (mode == 0 || mode > numFastModes) { 
-    mode = notFast ? VEE_YOU : STACK_LIGHTS;
+  if (true || mode == 0 || mode > numFastModes) { 
+    mode = notFast ? VEE_YOU : NARWHAL;
   }
   //mode = numButtonClickerModes;
 
@@ -202,6 +202,9 @@ void loop() {
         nblendPaletteTowardPalette( gCurrentPalette, gTargetPalette, 16);
       }
       colorwaves();
+      break;
+    case NARWHAL:
+      narwhal();
       break;
     case PRIDE:
       pride();

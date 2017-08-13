@@ -29,8 +29,8 @@ int vuPercent = 0;
 
 #define NUMM_MODES 9 // number of dotstar patterns
 int numModes = NUMM_MODES; // SEE below enum
-int numFastModes = 24; // set to last fast value
-int numButtonClickerModes = 32; // set to number of clicker modes
+int numFastModes = 25; // set to last fast value
+int numButtonClickerModes = 33; // set to number of clicker modes
 enum COLOR_MODES {
   // Adafruit modes
   ADA_LOOP = 0,
@@ -60,19 +60,20 @@ enum COLOR_MODES {
   BUBBLE_UP = 22,
   COLOR_WAVES = 23,
   PRIDE = 24,
+  NARWHAL = 25,
 
   // Button Modes
-  BUTTON_CLICKER = 25,
-  GROW_CLICKER = 26,
-  COMPASS = 27,
-  FINDWAYPOINT = 28,
-  BUTTON_MESHCOUNT = 29,
-  VU_METER = 30,
-  WIZARD = 31,
-  POI = 32,
+  BUTTON_CLICKER = 26,
+  GROW_CLICKER = 27,
+  COMPASS = 28,
+  FINDWAYPOINT = 29,
+  BUTTON_MESHCOUNT = 30,
+  VU_METER = 31,
+  WIZARD = 32,
+  POI = 33,
 
   // Caution!!! Must be last
-  SOLIDCOLOR = 33
+  SOLIDCOLOR = 34
 };
 
 // TWEAK ME!!!

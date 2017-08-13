@@ -512,6 +512,30 @@ void pride() {
 }
 
 
+struct Worm {
+  int pos = 0; // position, used with VSCALE
+  int v = 3; // velocity
+  int a = 1; // accelleration
+  CHSV color;
+};
+void narwhal() {
+  // a colored dot sweeping back and forth, with fading trails
+  fadeToBlackBy(leds, NUM_LEDS, 50);
+  int pos = beatsin16(13,0,NUM_LEDS);
+  int pos1 = beatsin16(26,0,NUM_LEDS);
+  int pos2 = beatsin16(6,0,NUM_LEDS);
+  leds[pos] += CHSV(gHue, 100, 255);
+  leds[pos1] += CHSV(gHue, 150, 255);
+  leds[pos2] += CHSV(gHue, 33, 255);
+
+  // send the 'leds' array out to the actual LED strip
+  FastLED.show();
+  // insert a delay to keep the framerate modest
+  delay(0);
+  FastLED.delay(3000/FRAMES_PER_SECOND); 
+}
+
+
 // Forward declarations of an array of cpt-city gradient palettes, and
 // a count of how many there are.  The actual color palette definitions
 // are at the bottom of this file.
