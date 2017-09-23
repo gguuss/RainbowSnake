@@ -10,7 +10,7 @@
 //#define LED_TYPE    APA102
 #define LED_TYPE DOTSTAR
 #define COLOR_ORDER BGR
-int NUM_LEDS = 50;
+int NUM_LEDS = 81; // CAUTION: OVERRIDES GLOBAL STATE for fastled modes
 CRGB* leds;
 byte* heat;
 #define BRIGHTNESS  60
