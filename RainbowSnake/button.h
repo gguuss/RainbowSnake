@@ -3,7 +3,9 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
+#ifndef USEPREFS
 #include <EEPROM.h>
+#endif
 
 #ifndef NOT_FAST 
 boolean notFast = false;
@@ -36,8 +38,10 @@ void changeMode() {
   }
 
   // Store the current mode in EEPROM
+  #ifndef USEPREFS
   EEPROM.write(1, mode);
   EEPROM.commit();
+  #endif
 }
 
 void onePress(int count) {
@@ -109,9 +113,14 @@ void threePress(int count) {
 unsigned long lastPresses[] = {0, 700, 1400};
 int pressCounter = 0;
 int pressCounts = 3; // used in modulo
+#ifndef NOWIFI
 String sparkleRequest = String("POST /pattern?value=") + String(mode) + 
     String(" HTTP/1.1\r\n") + String("Host: ") + String(SERVER_NAME) + 
     String("\r\n") + String("Connection: close\r\n\r\n");
+#endif
+#ifdef NOWIFI
+String sparkleRequest = "";
+#endif
 
 void checkModeButton() {
     float buttonState = digitalRead(MODE_PIN);

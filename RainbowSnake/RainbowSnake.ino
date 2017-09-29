@@ -3,8 +3,6 @@
  *    and sensor forwarding from mobile devices.
  */
 
-#include <ESP8266WiFi.h>
-String manageRequest(String request);
 #include <Adafruit_NeoPixel.h>
 #include <Adafruit_DotStar.h>
 
@@ -12,6 +10,11 @@ String manageRequest(String request);
 #define FASTLED_FORCE_SOFTWARE_PINS
 #include <FastLED.h>
 #include "config.h"
+
+#ifndef NOWIFI
+#include <ESP8266WiFi.h>
+#endif
+String manageRequest(String request);
 
 // Includes for dependent color functions
 #include "fastled.h"
@@ -94,7 +97,7 @@ void setup() {
   // 0 - No mode from settings...loaded in setupServer
   // >numFastModes - you will not be able to change the mode with button
   if (true || mode == 0 || mode > numFastModes) { 
-    mode = notFast ? VEE_YOU : NARWHAL;
+    mode = RAINBOW;
   }
   //mode = numButtonClickerModes;
 

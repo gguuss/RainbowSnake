@@ -23,6 +23,7 @@
 
 FASTLED_USING_NAMESPACE
 
+#ifndef NOWIFI
 extern "C" {
 #include "user_interface.h"
 }
@@ -30,7 +31,10 @@ extern "C" {
 
 #include <ESP8266WebServer.h>
 #include <FS.h>
+#ifndef USEPREFS
 #include <EEPROM.h>
+#endif
+#endif
 
 #include "GradientPalletes.h"
 
@@ -47,7 +51,9 @@ const char WiFiAPPSK[] = "";
 const char* ssid = "";
 const char* password = "";
 
+#ifndef NOWIFI
 ESP8266WebServer server(80);
+#endif
 
 uint8_t patternIndex = 0;
 uint8_t currentPatternIndex = 0; // Index number of which pattern is current
@@ -73,14 +79,18 @@ uint8_t brightness = brightnessMap[brightnessIndex];
 void sendPower()
 {
   String json = String("{'power':") + String(power) + String("}");
+  #ifndef NOWIFI
   server.send(200, "text/json", json);
+  #endif
   json = String();
 }
 
 void sendBrightness()
 {
   String json = String(brightness);
+  #ifndef NOWIFI
   server.send(200, "text/json", json);
+  #endif
   json = String();
 }
 
@@ -91,7 +101,9 @@ void sendSolidColor()
   json += ",\"g\":" + String(solidColor.g);
   json += ",\"b\":" + String(solidColor.b);
   json += "}";
+  #ifndef NOWIFI
   server.send(200, "text/json", json);
+  #endif
   json = String();
 }
 
@@ -103,7 +115,9 @@ void sendLatLong(){
   
   String json = String("{'lat':") + String(latitudeStr) + String(", 'long':") +
       String(longitudeStr) + "}";
+  #ifndef NOWIFI
   server.send(200, "text/json", json);
+  #endif
   json = String();
 }
 
@@ -132,8 +146,10 @@ void adjustBrightness(bool up)
   else if (brightnessIndex >= brightnessCount)
     brightnessIndex = 0;
 
+  #ifndef USEPREFS
   EEPROM.write(0, brightness);
   EEPROM.commit();
+  #endif
 }
 
 void setBrightness(int value)
@@ -148,8 +164,10 @@ void setBrightness(int value)
   FastLED.setBrightness(brightness);
   strip.setBrightness(brightness);
 
+  #ifndef USEPREFS
   EEPROM.write(0, brightness);
   EEPROM.commit();
+  #endif
 }
 
 void showSolidColor()
@@ -220,17 +238,21 @@ void setPattern(int value)
 
   mode = value;
 
+  #ifndef USEPREFS
   EEPROM.write(1, currentPatternIndex);
   EEPROM.commit();
+  #endif
 }
 
 void setSolidColor(uint8_t r, uint8_t g, uint8_t b)
 {
   solidColor = CRGB(r, g, b);
 
+  #ifndef USEPREFS
   EEPROM.write(2, r);
   EEPROM.write(3, g);
   EEPROM.write(4, b);
+  #endif
 
   if (mode != POI) {
     setPattern(patternCount - 1);
@@ -249,12 +271,16 @@ void sendPattern()
   json += "\"index\":" + String(mode);
   json += ",\"name\":\"" + patterns[mode].name + "\"";
   json += "}";
+  #ifndef NOWIFI
   server.send(200, "text/json", json);
+  #endif
   json = String();
 }
 
 void loadSize() {
+  #ifndef USEPREFS
   NUM_LEDS = EEPROM.read(5);
+  #endif
   if (NUM_LEDS <= 0) {
     NUM_LEDS = 25;
   }
@@ -264,20 +290,26 @@ void loadSize() {
 }
 
 void saveSize() {
+  #ifndef USEPREFS
   EEPROM.write(5, NUM_LEDS); // Store 
   EEPROM.commit();
+  #endif
 }
 
 void saveLatLong() {
+  #ifndef USEPREFS
   EEPROM.put(6, latitude);
   EEPROM.put(6 + sizeof(double), longitude);
   EEPROM.commit();
+  #endif
 }
 
 void loadSettings()
 {
+  #ifndef USEPREFS
   brightness = EEPROM.read(0);
   currentPatternIndex = EEPROM.read(1);
+  #endif USEPREFS
   if (currentPatternIndex < 0)
     currentPatternIndex = 0;
   else if (currentPatternIndex >= patternCount)
@@ -285,13 +317,20 @@ void loadSettings()
 
   mode = currentPatternIndex;
 
+  #ifndef USEPREFS
   byte r = EEPROM.read(2);
   byte g = EEPROM.read(3);
   byte b = EEPROM.read(4);
 
   EEPROM.get(6, latitude);
   EEPROM.get(6 + sizeof(double), longitude);
-
+  #endif
+  #ifdef USEPREFS
+  byte r = 100;
+  byte g = 150;
+  byte b = 50;
+  #endif
+  
   // FIXME: 
   // Loads size settings
   // loadSize();
@@ -309,7 +348,9 @@ void sendMessage(){
   String json = "{";
   json += "\"message\":\"" + message + "\"";
   json += "}";
+#ifndef NOWIFI
   server.send(200, "text/json", json);
+#endif
   json = String();
   // Update peers with new message
   updateMeshMessage();
@@ -346,7 +387,9 @@ void sendAll()
   json += ",\"AP\": \"" + AP_NameString + "\"";
   json += "}";
 
+#ifndef NOWIFI
   server.send(200, "text/json", json);
+#endif
   json = String();
 }
 
@@ -365,12 +408,20 @@ void adjustPattern(bool up)
   if (currentPatternIndex >= patternCount)
     currentPatternIndex = 0;
 
+  #ifndef USEPREFS
   EEPROM.write(1, currentPatternIndex);
   EEPROM.commit();
+  #endif
 }
 
+#ifdef NOWIFI
+void setupServer(void){}
+#endif
+#ifndef NOWIFI
 void setupServer(void) {
+  #ifndef USEPREFS
   EEPROM.begin(512);
+  #endif
   loadSettings();
   
   Serial.println();
@@ -627,8 +678,12 @@ void setupServer(void) {
 
   autoPlayTimeout = millis() + (autoPlayDurationSeconds * 1000);
 }
+#endif
 
-
+#ifdef NOWIFI
+void serverLoop(void){}
+#endif
+#ifndef NOWIFI
 void serverLoop(void) {
   server.handleClient();
 
@@ -641,4 +696,5 @@ void serverLoop(void) {
     return;
   }
 }
+#endif
 #endif

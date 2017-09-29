@@ -89,7 +89,8 @@ uint32_t color = 0xFF0000;      // 'On' color (starts red)
 
 // BOARD SETTINGS -- full configurations below
 // lights not working?  make sure you have the right board uncommented
-#define SETTINGS_WEMOS
+#define SETTINGS_ESP32_THING
+//#define SETTINGS_WEMOS
 //#define SETTINGS_WEMOS_NEOPIXEL // most common, if gguuss gave you one... this.
 //#define SETTINGS_ESP8266
 //#define SETTINGS_ADK
@@ -111,15 +112,17 @@ Adafruit_DotStar strip = Adafruit_DotStar(
 //______________End WeMos settings
 
 // Settings correspond to ESP32 Thing
-//#define SETTINGS_ESP32_THING
 #ifdef SETTINGS_ESP32_THING
-#define MODE_PIN   D3  // mode select pin connected to ground
+#define MODE_PIN   25  // mode select pin connected to ground
 #define NUMPIXELS  60 // Number of LEDs in strip
 #define DATAPIN    23
 #define CLOCKPIN   22
 #define SYSDELAY   50
+#define NOMODESWITCH
 Adafruit_DotStar strip = Adafruit_DotStar(
                            NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_BGR);
+#define NOWIFI
+#define USEPREFS
 #endif
 
 

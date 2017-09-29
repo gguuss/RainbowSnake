@@ -27,6 +27,9 @@
 */
 
 String manageRequest(String request);
+
+// WIFI stuff
+#ifndef NOWIFI
 #define SERVER_NAME "192.168.4.1"
 
 /**
@@ -66,6 +69,7 @@ String manageRequest(String request)
       modeTweak(mode);
       
       char response[60];
+      
       sprintf(response, "ACK ping mode: %d <3 %d.", mode, ESP.getChipId());  
     
       return response;
@@ -299,4 +303,15 @@ void buttonCountMeshNodes() {
     strip.show();
   }
 }
+#endif 
+
+// WIFI stubs
+#ifdef NOWIFI
+void buttonCountMeshNodes() {}
+void countMeshNodes() {}
+void updateMeshMode() {}
+void updateMeshMessage() {}
+void sendMessageManual(String message){ }
+#endif
+
 #endif
