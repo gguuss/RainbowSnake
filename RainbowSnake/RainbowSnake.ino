@@ -21,6 +21,9 @@ String manageRequest(String request);
 #include "pov.h"
 #include "gps.h"
 
+// Serial command module and (eventually) command centralization
+#include "command.h"
+
 // server
 #include "server.h"
 
@@ -116,6 +119,7 @@ void loop() {
   delay(0);
   serverLoop();
   delay(0);
+  serialLoop();
 
   // FIXME: Remove middleware, use currentPatternIndex
   switch (mode) {
