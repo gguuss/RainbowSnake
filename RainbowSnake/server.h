@@ -64,12 +64,6 @@ unsigned int autoPlayTimeout = 0;
 
 #define ARRAY_SIZE(A) (sizeof(A) / sizeof((A)[0]))
 
-// Current brightness settings
-const uint8_t brightnessCount = 5;
-uint8_t brightnessMap[brightnessCount] = { 16, 32, 64, 128, 255 };
-int brightnessIndex = 0;
-uint8_t brightness = brightnessMap[brightnessIndex];
-
 void sendPower()
 {
   String json = String("{'power':") + String(power) + String("}");
@@ -118,39 +112,6 @@ void setPower(uint8_t value)
   }
 }
 
-// adjust the brightness, and wrap around at the ends
-void adjustBrightness(bool up)
-{
-  if (up)
-    brightnessIndex++;
-  else
-    brightnessIndex--;
-
-  // wrap around at the ends
-  if (brightnessIndex < 0)
-    brightnessIndex = brightnessCount - 1;
-  else if (brightnessIndex >= brightnessCount)
-    brightnessIndex = 0;
-
-  EEPROM.write(0, brightness);
-  EEPROM.commit();
-}
-
-void setBrightness(int value)
-{
-  // don't wrap around at the ends
-  if (value > 255)
-    value = 255;
-  else if (value < 0) value = 0;
-
-  brightness = value;
-
-  FastLED.setBrightness(brightness);
-  strip.setBrightness(brightness);
-
-  EEPROM.write(0, brightness);
-  EEPROM.commit();
-}
 
 void showSolidColor()
 {
@@ -251,21 +212,6 @@ void sendPattern()
   json += "}";
   server.send(200, "text/json", json);
   json = String();
-}
-
-void loadSize() {
-  NUM_LEDS = EEPROM.read(5);
-  if (NUM_LEDS <= 0) {
-    NUM_LEDS = 25;
-  }
-  #ifndef FAST_NEOPIXEL
-  strip.updateLength(NUM_LEDS);
-  #endif
-}
-
-void saveSize() {
-  EEPROM.write(5, NUM_LEDS); // Store 
-  EEPROM.commit();
 }
 
 void saveLatLong() {

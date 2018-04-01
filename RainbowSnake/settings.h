@@ -201,30 +201,6 @@ void brightnessSelect() {
   }
 }
 
-/**
- * updateSize - Renders current selection for strip size.
- * 
- * @param currentSize The current size, in pixels of the LED strip.
- */
-void updateSize(int currentSize) {
-  #ifndef FAST_NEOPIXEL // TODO: determine update size NeoPixel
-  strip.updateLength(currentSize * 5);
-  #endif
-  
-  for (int i=0; i < strip.numPixels(); i++) {
-    if (i == 0 || i == strip.numPixels() - 1) {
-      strip.setPixelColor(i, 0xFFFFFF); // white ends
-    } else {
-      strip.setPixelColor(i, 0);
-    }
-  } 
-  strip.show();
-
-  
-  NUM_LEDS = currentSize * 5;
-  saveSize();
-  fastLedSetup();
-}
 
 /**
  * sizeSelect - Code for selecting the size of the LED strip.
