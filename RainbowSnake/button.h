@@ -122,7 +122,39 @@ String sparkleRequest = String("POST /pattern?value=") + String(mode) +
 String sparkleRequest = "";
 #endif
 
+int xValue = 0;
+int yValue = 0;
+int aValue = 0;
+int bValue = 0;
+void checkAnalogIns() {
+  #ifdef XBUTTON_PIN
+  xValue = analogRead(XBUTTON_PIN);
+  // FIXME: move to helpers
+  // TODO: Volume-style control
+  Serial.println(xValue);
+  strip.setBrightness((255 * xValue) / 4096);  
+  // TODO: Debug / logging
+  //Serial.println("X: " + String(xValue));
+  #endif
+  #ifdef YBUTTON_PIN
+  yValue = analogRead(YBUTTON_PIN);
+  //Serial.println("Y: " + String(yValue));
+  #endif
+  #ifdef ABUTTON_PIN
+  aValue = analogRead(ABUTTON_PIN);
+  SYSDELAY = round(200 - ((200 * aValue) / 4096));
+  //Serial.println("A: " + String(aValue));
+  #endif
+  #ifdef BBUTTON_PIN
+  bValue = analogRead(BBUTTON_PIN);
+  //Serial.println("B: " + String(bValue));
+  #endif
+}
+
 void checkModeButton() {
+    checkAnalogIns();
+    return;
+    
     float buttonState = digitalRead(MODE_PIN);
 
     // check if the pushbutton is pressed.

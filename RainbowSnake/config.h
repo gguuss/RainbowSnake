@@ -28,7 +28,7 @@ double currLat = 0.0, currLong = 0.0; // For GPS current position
 int vuPercent = 0;
 
 #define NUMM_MODES 9 // number of dotstar patterns
-int numModes = NUMM_MODES; // SEE below enum
+int numModes = 34; // SEE below enum
 int numFastModes = 25; // set to last fast value
 int numButtonClickerModes = 33; // set to number of clicker modes
 enum COLOR_MODES {
@@ -89,8 +89,9 @@ uint32_t color = 0xFF0000;      // 'On' color (starts red)
 
 // BOARD SETTINGS -- full configurations below
 // lights not working?  make sure you have the right board uncommented
-#define SETTINGS_ESP32_THING
-//#define SETTINGS_WEMOS
+//#define SETTINGS_LONLIN32
+//#define SETTINGS_ESP32_THING
+#define SETTINGS_WEMOS
 //#define SETTINGS_WEMOS_NEOPIXEL // most common, if gguuss gave you one... this.
 //#define SETTINGS_ESP8266
 //#define SETTINGS_ADK
@@ -102,10 +103,11 @@ uint32_t color = 0xFF0000;      // 'On' color (starts red)
 // Settings correspond to WeMos/1Button
 #ifdef SETTINGS_WEMOS
 #define MODE_PIN   D3  // mode select pin connected to ground
-#define NUMPIXELS  25 // Number of LEDs in strip
+#define NUMPIXELS  48 // Number of LEDs in strip
 #define DATAPIN    D6
 #define CLOCKPIN   D7
 #define SYSDELAY   50
+//#define NOMODESWITCH // #Keepme
 Adafruit_DotStar strip = Adafruit_DotStar(
                            NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_BGR);
 #endif
@@ -117,12 +119,52 @@ Adafruit_DotStar strip = Adafruit_DotStar(
 #define NUMPIXELS  60 // Number of LEDs in strip
 #define DATAPIN    23
 #define CLOCKPIN   22
-#define SYSDELAY   50
-#define NOMODESWITCH
+int SYSDELAY = 50;
 Adafruit_DotStar strip = Adafruit_DotStar(
                            NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_BGR);
 #define NOWIFI
 #define USEPREFS
+#define NOT_FAST
+#define XBUTTON_PIN 32
+#define YBUTTON_PIN 33
+#define ABUTTON_PIN 34
+#define BBUTTON_PIN 35
+
+
+#define ROT_SW 39    // rotary pushbutton
+#define ROT_B 12     // rotary B
+#define ROT_A 14     // rotary A
+#define ROT_LEDB 36  // green LED
+#define ROT_LEDG 37  // blue LED
+#define ROT_LEDR 38  // red LED
+
+#endif
+
+// Settings correspond to Lonlin32
+#ifdef SETTINGS_LONLIN32
+#define MODE_PIN   25  // mode select pin connected to ground
+#define NUMPIXELS  60 // Number of LEDs in strip
+#define DATAPIN    16
+#define CLOCKPIN   17
+int SYSDELAY = 50;
+Adafruit_DotStar strip = Adafruit_DotStar(
+                           NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_BGR);
+#define NOWIFI
+#define USEPREFS
+#define NOT_FAST
+#define XBUTTON_PIN 32
+#define YBUTTON_PIN 33
+#define ABUTTON_PIN 34
+#define BBUTTON_PIN 35
+
+
+#define ROT_SW 39    // rotary pushbutton
+#define ROT_B 12     // rotary B
+#define ROT_A 14     // rotary A
+#define ROT_LEDB 36  // green LED
+#define ROT_LEDG 37  // blue LED
+#define ROT_LEDR 38  // red LED
+
 #endif
 
 

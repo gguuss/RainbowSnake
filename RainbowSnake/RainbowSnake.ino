@@ -11,10 +11,13 @@
 #include <FastLED.h>
 #include "config.h"
 
-#ifndef NOWIFI
+#ifndef NOWIFI // Don't change this, it's right.
 #include <ESP8266WiFi.h>
 #endif
 String manageRequest(String request);
+
+// Includes for Rotary hardware
+#include "LEDRotary.h"
 
 // Includes for dependent color functions
 #include "fastled.h"
@@ -87,17 +90,21 @@ void setup() {
   while (true){
     magicLoop();
   }
-  #endif
-
+  #endif  
 
   fastLedSetup();
-
+  #ifdef ROT_A
   setupServer();
+  // TODO: From config? Fix power in HW?
+  pinMode(25, OUTPUT);
+  digitalWrite(25, 1);
+  #endif
+  setupRotary();
 
   // 0 - No mode from settings...loaded in setupServer
   // >numFastModes - you will not be able to change the mode with button
   if (true || mode == 0 || mode > numFastModes) { 
-    mode = RAINBOW;
+    mode = SINELON;
   }
   //mode = numButtonClickerModes;
 
@@ -116,10 +123,13 @@ void setup() {
  */
 void loop() {
   tick++;
+
   delay(0);
   serverLoop();
   delay(0);
+  rotaryLoop();  
 
+  // Execute UI code less frequently  
   // FIXME: Remove middleware, use currentPatternIndex
   switch (mode) {
     case COLOR_MODES::ADA_LOOP:
@@ -244,7 +254,7 @@ void loop() {
       break;
   }
 
-  // Change the mode
+  // Change the mode 
   if (hasModeswitch && (mode <= numFastModes || mode == SOLIDCOLOR)) {
     // Not even!
     checkModeButton();
