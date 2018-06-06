@@ -70,22 +70,19 @@ uint8_t brightnessMap[brightnessCount] = { 16, 32, 64, 128, 255 };
 int brightnessIndex = 0;
 uint8_t brightness = brightnessMap[brightnessIndex];
 
-void sendPower()
-{
+void sendPower() {
   String json = String("{'power':") + String(power) + String("}");
   server.send(200, "text/json", json);
   json = String();
 }
 
-void sendBrightness()
-{
+void sendBrightness() {
   String json = String(brightness);
   server.send(200, "text/json", json);
   json = String();
 }
 
-void sendSolidColor()
-{
+void sendSolidColor() {
   String json = "{";
   json += "\"r\":" + String(solidColor.r);
   json += ",\"g\":" + String(solidColor.g);
@@ -95,7 +92,7 @@ void sendSolidColor()
   json = String();
 }
 
-void sendLatLong(){  
+void sendLatLong() {
   char latitudeStr[64];  
   char longitudeStr[64];  
   dtostrf(latitude, 6, 15, latitudeStr);
@@ -107,8 +104,7 @@ void sendLatLong(){
   json = String();
 }
 
-void setPower(uint8_t value)
-{
+void setPower(uint8_t value) {
   if (value == 1) {
     FastLED.setBrightness(brightness);
     strip.setBrightness(brightness);
@@ -119,8 +115,7 @@ void setPower(uint8_t value)
 }
 
 // adjust the brightness, and wrap around at the ends
-void adjustBrightness(bool up)
-{
+void adjustBrightness(bool up) {
   if (up)
     brightnessIndex++;
   else
@@ -136,8 +131,7 @@ void adjustBrightness(bool up)
   EEPROM.commit();
 }
 
-void setBrightness(int value)
-{
+void setBrightness(int value) {
   // don't wrap around at the ends
   if (value > 255)
     value = 255;
@@ -152,8 +146,7 @@ void setBrightness(int value)
   EEPROM.commit();
 }
 
-void showSolidColor()
-{
+void showSolidColor() {
   fill_solid(leds, NUM_LEDS, solidColor);
   FastLED.show();
 }
@@ -208,8 +201,7 @@ PatternAndNameList patterns = {
 const uint8_t patternCount = ARRAY_SIZE(patterns);
 
 
-void setPattern(int value)
-{
+void setPattern(int value) {
   // don't wrap around at the ends
   if (value < 0)
     value = 0;
@@ -224,8 +216,7 @@ void setPattern(int value)
   EEPROM.commit();
 }
 
-void setSolidColor(uint8_t r, uint8_t g, uint8_t b)
-{
+void setSolidColor(uint8_t r, uint8_t g, uint8_t b) {
   solidColor = CRGB(r, g, b);
 
   EEPROM.write(2, r);
@@ -243,8 +234,7 @@ void setSolidColor(CRGB color)
   setSolidColor(color.r, color.g, color.b);
 }
 
-void sendPattern()
-{
+void sendPattern() {
   String json = "{";
   json += "\"index\":" + String(mode);
   json += ",\"name\":\"" + patterns[mode].name + "\"";
@@ -294,7 +284,7 @@ void loadSettings()
 
   // FIXME: 
   // Loads size settings
-  // loadSize();
+  loadSize();
 
   if (r == 0 && g == 0 && b == 0)
   {
@@ -316,8 +306,7 @@ void sendMessage(){
 }
 
 
-void sendAll()
-{
+void sendAll() {
   String json = "{";
 
   json += "\"power\":" + String(power) + ",";
@@ -336,8 +325,7 @@ void sendAll()
   json += "}";
 
   json += ",\"patterns\":[";
-  for (uint8_t i = 0; i < patternCount; i++)
-  {
+  for (uint8_t i = 0; i < patternCount; i++) {
     json += "\"" + patterns[i].name + "\"";
     if (i < patternCount - 1)
       json += ",";
@@ -352,8 +340,7 @@ void sendAll()
 
 
 // increase or decrease the current pattern number, and wrap around at the ends
-void adjustPattern(bool up)
-{
+void adjustPattern(bool up) {
   if (up)
     currentPatternIndex++;
   else
@@ -395,8 +382,7 @@ void setupServer(void) {
     Serial.printf("\n");
   }
 
-  if (apMode)
-  {
+  if (apMode) {
     WiFi.mode(WIFI_AP);
 
     // Do a little work to get a unique-ish name. Append the
@@ -418,9 +404,7 @@ void setupServer(void) {
 
     Serial.printf("Connect to Wi-Fi access point: %s\n", AP_NameChar);
     Serial.println("and open http://192.168.4.1 in your browser");
-  }
-  else
-  {
+  } else {
     Serial.printf("Connecting to %s\n", ssid);
     if (String(WiFi.SSID()) != String(ssid)) {
       WiFi.begin(ssid, password);
@@ -520,13 +504,10 @@ void setupServer(void) {
     currLong = strtod(longitudeStr, NULL);
     compassDir = server.arg("heading").toInt();
 
-    
-
     //Debug print difference vectors
     dtostrf(currLat - latitude, 6, 15, latitudeStr);
     dtostrf(currLong - longitude, 6, 15, longitudeStr);    
     Serial.print("Lat/Long: "); Serial.print(latitudeStr); Serial.print("/"); Serial.println(longitudeStr);
-
 
     // Return heading
     String json = String(compassDir);
@@ -592,6 +573,8 @@ void setupServer(void) {
     String json = String("{\"size\":") + String(NUM_LEDS) + String("}");
     server.send(200, "text/json", json);
     json = String();
+
+    saveSize();
   });
 
   server.on("/bpm", HTTP_POST, []() {
@@ -631,13 +614,10 @@ void setupServer(void) {
 
 void serverLoop(void) {
   server.handleClient();
-
   if (power == 0) {
-    /*
     fill_solid(leds, NUM_LEDS, CRGB::Black);
     FastLED.show();
     FastLED.delay(15);
-    */
     return;
   }
 }

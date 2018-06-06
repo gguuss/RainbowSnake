@@ -90,6 +90,8 @@ uint32_t color = 0xFF0000;      // 'On' color (starts red)
 // BOARD SETTINGS -- full configurations below
 // lights not working?  make sure you have the right board uncommented
 #define SETTINGS_WEMOS
+//#define SETTINGS_ESP32_THING
+//#define SETTINGS_WEMOS_NEOPIXEL
 //#define SETTINGS_WEMOS_NEOPIXEL // most common, if gguuss gave you one... this.
 //#define SETTINGS_ESP8266
 //#define SETTINGS_ADK
@@ -101,17 +103,17 @@ uint32_t color = 0xFF0000;      // 'On' color (starts red)
 // Settings correspond to WeMos/1Button
 #ifdef SETTINGS_WEMOS
 #define MODE_PIN   D3  // mode select pin connected to ground
-#define NUMPIXELS  25 // Number of LEDs in strip
+#define NUMPIXELS  320 // Number of LEDs in strip
 #define DATAPIN    D6
 #define CLOCKPIN   D7
 #define SYSDELAY   50
+#define NOMODESWITCH
 Adafruit_DotStar strip = Adafruit_DotStar(
                            NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_BGR);
 #endif
 //______________End WeMos settings
 
 // Settings correspond to ESP32 Thing
-//#define SETTINGS_ESP32_THING
 #ifdef SETTINGS_ESP32_THING
 #define MODE_PIN   D3  // mode select pin connected to ground
 #define NUMPIXELS  60 // Number of LEDs in strip
@@ -126,7 +128,7 @@ Adafruit_DotStar strip = Adafruit_DotStar(
 // Settings correspond to WeMos/1Button
 #ifdef SETTINGS_WEMOS_NEOPIXEL
 #define MODE_PIN   D3  // mode select pin connected to ground
-#define NUMPIXELS  50 // Number of LEDs in strip
+#define NUMPIXELS  320 // Number of LEDs in strip
 #define DATAPIN    D6
 #define SYSDELAY   50
 #define FAST_NEOPIXEL true

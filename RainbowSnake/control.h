@@ -4,8 +4,6 @@
  * Control.h - For mmass control of LED mesh
  */
 
-
-
 // For TESTING, don't mess with.
 boolean skipAwful = true; // Disable bad patterns
 
@@ -56,7 +54,6 @@ void controlLoop() {
   Serial.println(selectedItem);
 
   mode = selectedItem;
-  updateMeshMode();
   updateMeshMode();
 }
 #endif

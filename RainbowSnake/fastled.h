@@ -158,15 +158,13 @@ void fastRainbow()
 }
 
 
-void addGlitter( fract8 chanceOfGlitter) 
-{
+void addGlitter( fract8 chanceOfGlitter) {
   if( random8() < chanceOfGlitter) {
     leds[ random16(NUM_LEDS) ] += CRGB::White;
   }
 }
 
-void rainbowWithGlitter() 
-{
+void rainbowWithGlitter() {
   // built-in FastLED rainbow, plus some random sparkly glitter
   fastRainbow();
   addGlitter(80);
@@ -181,7 +179,7 @@ static void fastRedBlue(boolean on) {
   // a colored dot sweeping back and forth, with fading trails
   fadeToBlackBy( leds, NUM_LEDS, 80);
 
-  for (int i=0; i < strip.numPixels(); i++){
+  for (int i=0; i < strip.numPixels(); i++) {
     if (i < strip.numPixels() / 2) {
       if (on) {
         leds[i] = CRGB::Red;
@@ -204,8 +202,8 @@ static void fastRedBlue(boolean on) {
 }
 
 void stackLights() {
-  for (int i=0; i < strip.numPixels(); i++){
-    if (random8() < 200){
+  for (int i=0; i < strip.numPixels(); i++) {
+    if (random8() < 200) {
       blur1d(leds, strip.numPixels(), 64);
     }
   }
@@ -213,12 +211,11 @@ void stackLights() {
   // send the 'leds' array out to the actual LED strip
   FastLED.show();
   // insert a delay to keep the framerate modest
-  FastLED.delay(1000/FRAMES_PER_SECOND); 
+  FastLED.delay(1000/FRAMES_PER_SECOND);
 }
 
 
-void confetti() 
-{
+void confetti() {
   // random colored speckles that blink in and fade smoothly
   fadeToBlackBy( leds, NUM_LEDS, 10);
   int pos = random16(NUM_LEDS);
@@ -245,8 +242,7 @@ void sinelon()
   FastLED.delay(1000/FRAMES_PER_SECOND); 
 }
 
-void bpm()
-{
+void bpm() {
   // colored stripes pulsing at a defined Beats-Per-Minute (BPM)
   uint8_t BeatsPerMinute = gBpm == 120 ? 62 : gBpm;
   CRGBPalette16 palette = PartyColors_p;
@@ -319,8 +315,8 @@ void redBeat() {
       }
     }
   } 
-  if (pos % 3 == 0){ 
-    for (int i=0; i < NUM_LEDS; i++){
+  if (pos % 3 == 0) {
+    for (int i=0; i < NUM_LEDS; i++) {
       leds[i].fadeToBlackBy(1);
     }
   }
@@ -338,7 +334,7 @@ void stacking() {
     int stripeSize = (random8() % NUM_LEDS) / 2;
     int stripePos = (random8() % NUM_LEDS) - stripeSize;
     if (stripePos < 0) stripePos = 0;
-    for (int i=0; i < stripeSize; i++){
+    for (int i=0; i < stripeSize; i++) {
       leds[i+ stripePos] = color;
     }
     // Latch
@@ -348,8 +344,8 @@ void stacking() {
   }
   
   // OMG it's so fast
-  if (pos % (NUM_LEDS / 5) == 0 && !fadeProtect){ 
-    for (int i=0; i < NUM_LEDS; i++){
+  if (pos % (NUM_LEDS / 5) == 0 && !fadeProtect) {
+    for (int i=0; i < NUM_LEDS; i++) {
       leds[i].fadeToBlackBy(32);
     }
     blur1d (leds, NUM_LEDS, 0.8);
@@ -374,13 +370,13 @@ void stackingMore() {
     int stripeSize = (random8() % NUM_LEDS) / 3;
     int stripePos = posLastMore;
     if (stripePos < 0) stripePos = 0;
-    for (int i=0; i < stripeSize && (i + stripePos) < NUM_LEDS; i++){
+    for (int i=0; i < stripeSize && (i + stripePos) < NUM_LEDS; i++) {
       leds[i+ stripePos] = color;
     }
     // Latch
     lightProtectMore = true;
     posLastMore += stripeSize;
-    if (posLastMore > NUM_LEDS){
+    if (posLastMore > NUM_LEDS) {
       posLastMore = 0;
     }
   } 
@@ -389,8 +385,8 @@ void stackingMore() {
   }
   
   // OMG it's so fast
-  if (pos % (NUM_LEDS / 5) == 0 && !fadeProtectMore){ 
-    for (int i=0; i < NUM_LEDS; i++){
+  if (pos % (NUM_LEDS / 5) == 0 && !fadeProtectMore) {
+    for (int i=0; i < NUM_LEDS; i++) {
       leds[i].fadeToBlackBy(16);
     }
     fadeProtectMore = true;
@@ -417,7 +413,7 @@ bool bubbleMoveProtect = false;
 Bubble bubbles[MAXBUBBLES];
 int numBubbles = 0;
 #define VSCALE 300 // scale used for velocity
-void bubble(CRGB bubbleColor, boolean noRainbow){
+void bubble(CRGB bubbleColor, boolean noRainbow) {
   // Add a bubble
   if (numBubbles < MAXBUBBLES) {
     bubbles[numBubbles].pos = 0;
@@ -552,8 +548,7 @@ CRGBPalette16 gTargetPalette( gGradientPalettes[0] );
 // ColorWavesWithPalettes by Mark Kriegsman: https://gist.github.com/kriegsman/8281905786e8b2632aeb
 // This function draws color waves with an ever-changing,
 // widely-varying set of parameters, using a color palette.
-void colorwaves()
-{
+void colorwaves() {
   static uint16_t sPseudotime = 0;
   static uint16_t sLastMillis = 0;
   static uint16_t sHue16 = 0;
@@ -608,8 +603,7 @@ void colorwaves()
 
 // Alternate rendering function just scrolls the current palette
 // across the defined LED strip.
-void palettetest()
-{
+void palettetest() {
   static uint8_t startindex = 0;
   startindex--;
   fill_palette( leds, NUM_LEDS, startindex, (256 / NUM_LEDS) + 1, gCurrentPalette, 255, LINEARBLEND);

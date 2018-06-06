@@ -19,7 +19,7 @@ enum POV_MODES {
 };
 
 // Renders a rainbow spiral
-void rainbowSpiral(){
+void rainbowSpiral() {
   for (int i=0; i < strip.numPixels(); i++){
     if ((i + row) % 5 != 0){
       strip.setPixelColor(i, 0);
@@ -51,7 +51,7 @@ void povWave() {
   // BPM, Min, Max
   uint8_t waveSize = beatsin8(240, 5, (2*strip.numPixels()) / 3);
   strip.clear();
-  for (int i=0; i < waveSize; i++){
+  for (int i=0; i < waveSize; i++) {
     strip.setPixelColor(i, wheel(waveSize * 20));
   }
   strip.show();
@@ -61,14 +61,14 @@ void povWave() {
 void povSquare() {
 
   uint8_t waveSize = beatsin8(120, 5, (4*strip.numPixels()) / 5);
-  if (waveSize > strip.numPixels() / 2){
+  if (waveSize > strip.numPixels() / 2) {
     waveSize = (4*strip.numPixels()) / 5;
   } else {
     waveSize = strip.numPixels() / 2;
   }
   
   strip.clear();
-  for (int i=strip.numPixels() / 5; i < waveSize; i++){
+  for (int i=strip.numPixels() / 5; i < waveSize; i++) {
     strip.setPixelColor(i, wheel( waveSize * 8));
   }
   strip.show();
@@ -79,7 +79,7 @@ void povSquare() {
 void bitmapLoop16(uint32_t bitmap[][16], int height) { 
   if (row >= height) row = 0;
   strip.clear();
-  for (int i=0; i < 16; i++){
+  for (int i=0; i < 16; i++) {
     strip.setPixelColor(i, bitmap[row][i]);
   }
   strip.show();
@@ -90,7 +90,7 @@ void bitmapLoop16(uint32_t bitmap[][16], int height) {
 void bitmapLoop25(uint32_t bitmap[][25], int height) { 
   if (row >= height) row = 0;
   strip.clear();
-  for (int i=0; i < 25; i++){
+  for (int i=0; i < 25; i++) {
     strip.setPixelColor(i, bitmap[row][i]);
   }
   strip.show();
