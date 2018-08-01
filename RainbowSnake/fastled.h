@@ -2,6 +2,7 @@
 #define FASTLED_H
 /**
  * fastled.h - FastLed Patterns, doesn't work on all boards, Feather needs to not use pin 16
+ *             considerable portions taken from various fastled examples, annotations needed.
  */
 #include "GradientPalletes.h" // for waves
 

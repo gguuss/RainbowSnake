@@ -1,9 +1,8 @@
 #ifndef CONTROL_H
 #define CONTROL_H
 /**
- * Control.h - For mmass control of LED mesh
+ * Control.h - For mmas control of LED mesh
  */
-
 // For TESTING, don't mess with.
 boolean skipAwful = true; // Disable bad patterns
 
