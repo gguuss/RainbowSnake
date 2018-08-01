@@ -103,7 +103,7 @@ uint32_t color = 0xFF0000;      // 'On' color (starts red)
 // Settings correspond to WeMos/1Button
 #ifdef SETTINGS_WEMOS
 #define MODE_PIN   D3  // mode select pin connected to ground
-#define NUMPIXELS  320 // Number of LEDs in strip
+#define NUMPIXELS  25 // Number of LEDs in strip
 #define DATAPIN    D6
 #define CLOCKPIN   D7
 #define SYSDELAY   50
