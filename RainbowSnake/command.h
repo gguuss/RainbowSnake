@@ -1,3 +1,5 @@
+#ifndef COMMAND_H
+#define COMMAND_H
 /**
  * command.h - centralization of commanding structure and serial
  *             controls
@@ -145,3 +147,4 @@ void serialLoop() {
     readString="";
   }   
 }
+#endif

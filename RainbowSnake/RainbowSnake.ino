@@ -21,9 +21,6 @@ String manageRequest(String request);
 #include "pov.h"
 #include "gps.h"
 
-// Serial command module and (eventually) command centralization
-#include "command.h"
-
 // server
 #include "server.h"
 
@@ -60,7 +57,7 @@ void setup() {
       rainbow(); // vary colors as much as possible
     }
   #endif
-
+  
   #ifdef NOMODESWITCH
   hasModeswitch = false;
   #endif
@@ -122,7 +119,8 @@ void loop() {
   delay(0);
   serverLoop();
   delay(0);
-  serialLoop();
+
+  
 
   // FIXME: Remove middleware, use currentPatternIndex
   switch (mode) {
@@ -253,7 +251,7 @@ void loop() {
       break;
     case FINDWAYPOINT:
       distanceHome();
-      break;
+      break;      
     case BUTTON_MESHCOUNT:
       buttonCountMeshNodes();
       break;
@@ -277,7 +275,7 @@ void loop() {
     // Not even!
     checkModeButton();
   } else {
-    if ((millis() - lastModeChange) > 20000) {
+    if ((millis() - lastModeChange) > 20000 && enableLoop) {    
       mode = nextmode;
       lastModeChange=millis();
     }

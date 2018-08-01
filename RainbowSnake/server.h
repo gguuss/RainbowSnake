@@ -32,11 +32,15 @@ extern "C" {
 #include <FS.h>
 #include <EEPROM.h>
 
+#include "command.h"
 #include "GradientPalletes.h"
+#include "colors.h"
+#include "fastled.h"
 
 String AP_NameString;
 const bool apMode = true;
 String message = "";
+bool enableLoop = true; 
 
 #include "mesh.h"
 
@@ -67,10 +71,6 @@ unsigned int autoPlayTimeout = 0;
 #define ARRAY_SIZE(A) (sizeof(A) / sizeof((A)[0]))
 
 // Current brightness settings
-const uint8_t brightnessCount = 5;
-uint8_t brightnessMap[brightnessCount] = { 16, 32, 64, 128, 255 };
-int brightnessIndex = 0;
-uint8_t brightness = brightnessMap[brightnessIndex];
 
 void sendPower() {
   String json = String("{'power':") + String(power) + String("}");
@@ -95,11 +95,11 @@ void sendSolidColor() {
 }
 
 void sendLatLong() {
-  char latitudeStr[64];
-  char longitudeStr[64];
+  char latitudeStr[64];  
+  char longitudeStr[64];  
   dtostrf(latitude, 6, 15, latitudeStr);
   dtostrf(longitude, 6, 15, longitudeStr);
-
+  
   String json = String("{'lat':") + String(latitudeStr) + String(", 'long':") +
       String(longitudeStr) + "}";
   server.send(200, "text/json", json);
@@ -114,38 +114,6 @@ void setPower(uint8_t value) {
     FastLED.setBrightness(0);
     strip.setBrightness(0);
   }
-}
-
-// adjust the brightness, and wrap around at the ends
-void adjustBrightness(bool up) {
-  if (up)
-    brightnessIndex++;
-  else
-    brightnessIndex--;
-
-  // wrap around at the ends
-  if (brightnessIndex < 0)
-    brightnessIndex = brightnessCount - 1;
-  else if (brightnessIndex >= brightnessCount)
-    brightnessIndex = 0;
-
-  EEPROM.write(0, brightness);
-  EEPROM.commit();
-}
-
-void setBrightness(int value) {
-  // don't wrap around at the ends
-  if (value > 255)
-    value = 255;
-  else if (value < 0) value = 0;
-
-  brightness = value;
-
-  FastLED.setBrightness(brightness);
-  strip.setBrightness(brightness);
-
-  EEPROM.write(0, brightness);
-  EEPROM.commit();
 }
 
 void showSolidColor() {
@@ -170,10 +138,10 @@ PatternAndNameList patterns = {
   { hsvLoop, "HSV Color loop" },
   { vLoop, "Color value cylon" },
   { rainbowAll, "Moving Rainbow" },
-  { rainbowTheater, "HSV all" },
+  { rainbowTheater, "Rainbow Theatre" },
   { pictureLoop, "Rainbow Theater Chase" },
-  { fastRainbow, "PacMan" },
-  { colorwaves, "POV loop" },
+  { fastRainbow, "Fast Rainbow" },
+  { colorwaves, "Color Waves" },
   { palettetest, "Red Blue" },
   { fastRainbow, "Fire 2012" },
   { pride, "Rainbow" },
@@ -183,12 +151,11 @@ PatternAndNameList patterns = {
   { juggle, "Fast Cylon" },
   { sinelon, "Sinelon" },
   { juggle, "Juggle" },
-  { juggle, "Bounce" },
-  { bpm, "Bars"},
-  { bpm, "Heartbeat"},
-  { bpm, "Stacks" },
-  { bpm, "Rainbow Spray"},
-  { showSolidColor, "BPM" },
+  { bounce, "Bounce" },
+  { stackLights, "Stacks" },
+  { stacking, "Stacking"},
+  { stackingMore, "More Stacking" },
+  { bpm, "BPM" },
   { pride, "Pride" },
   { buttonClicker, "Button Clicker" },
   { growClicker, "Grow Clicker" },
@@ -219,6 +186,7 @@ void setPattern(int value) {
 }
 
 void setSolidColor(uint8_t r, uint8_t g, uint8_t b) {
+  enableLoop = false;
   solidColor = CRGB(r, g, b);
 
   EEPROM.write(2, r);
@@ -245,22 +213,6 @@ void sendPattern() {
   json = String();
 }
 
-void loadSize() {
-  NUM_LEDS = EEPROM.read(5);
-  if (NUM_LEDS <= 0) {
-    NUM_LEDS = 320;
-  }
-  #ifndef FAST_NEOPIXEL
-  // FIXME
-  //strip.updateLength(NUM_LEDS);
-  #endif
-}
-
-void saveSize() {
-  EEPROM.write(5, NUM_LEDS); // Store
-  EEPROM.commit();
-}
-
 void saveLatLong() {
   EEPROM.put(6, latitude);
   EEPROM.put(6 + sizeof(double), longitude);
@@ -285,7 +237,7 @@ void loadSettings()
   EEPROM.get(6, latitude);
   EEPROM.get(6 + sizeof(double), longitude);
 
-  // FIXME:
+  // FIXME: 
   // Loads size settings
   loadSize();
 
@@ -362,7 +314,7 @@ void adjustPattern(bool up) {
 void setupServer(void) {
   EEPROM.begin(512);
   loadSettings();
-
+  
   Serial.println();
   Serial.print( F("Heap: ") ); Serial.println(system_get_free_heap_size());
   Serial.print( F("Boot Vers: ") ); Serial.println(system_get_boot_version());
@@ -371,7 +323,7 @@ void setupServer(void) {
   Serial.print( F("Chip ID: ") ); Serial.println(system_get_chip_id());
   Serial.print( F("Flash ID: ") ); Serial.println(spi_flash_get_id());
   Serial.print( F("Flash Size: ") ); Serial.println(ESP.getFlashChipRealSize());
-  Serial.print( F("Vcc: ") ); Serial.println(ESP.getVcc());
+  Serial.print( F("Vcc: ") ); Serial.println(ESP.getVcc());  
   Serial.println();
 
   SPIFFS.begin();
@@ -431,7 +383,7 @@ void setupServer(void) {
     hasNotification = false;
   });
 
-  server.on("/power", HTTP_GET, []() {
+  server.on("/power", HTTP_GET, []() {    
     sendPower();
   });
 
@@ -440,7 +392,7 @@ void setupServer(void) {
     Serial.println("POWER: " + server.arg("value"));
     #endif
     String value = server.arg("value");
-    setPower(value.toInt());
+    setPower(value.toInt());    
     sendPower();
   });
 
@@ -448,10 +400,13 @@ void setupServer(void) {
     sendSolidColor();
   });
 
+  
+
   server.on("/solidColor", HTTP_POST, []() {
     #ifdef NETDEBUG
     Serial.println("RGB: " + server.arg("r") + "," + server.arg("g") + "," + server.arg("b"));
     #endif
+    enableLoop = false;
     String r = server.arg("r");
     String g = server.arg("g");
     String b = server.arg("b");
@@ -465,7 +420,7 @@ void setupServer(void) {
     compassDir = server.arg("value").toInt();
     Serial.print("Compass:"); Serial.println(compassDir);
     mode = COMPASS;
-
+  
     String json = String(compassDir);
     server.send(200, "text/json", json);
     json = String();
@@ -474,19 +429,19 @@ void setupServer(void) {
   server.on("/latlong", HTTP_GET, []() {
     sendLatLong();
   });
-
+  
   server.on("/latlong", HTTP_POST, []() {
     char latitudeStr[64];
     server.arg("lat").toCharArray(latitudeStr,64);
     char longitudeStr[64];
     server.arg("long").toCharArray(longitudeStr, 64);
-
+    
     latitude = strtod(latitudeStr, NULL);
     longitude = strtod(longitudeStr, NULL);
 
     dtostrf(latitude, 6, 15, latitudeStr);
     dtostrf(longitude, 6, 15, longitudeStr);
-
+    
     saveLatLong();
     sendLatLong();
   });
@@ -497,7 +452,7 @@ void setupServer(void) {
     String json = String("{vuValue: " + String(vuPercent) + "}");
     server.send(200, "text/json", json);
     json = String();
-    mode = VU_METER;
+    mode = VU_METER;    
   });
 
   server.on("/currposition", HTTP_POST, []() {
@@ -514,7 +469,7 @@ void setupServer(void) {
 
     //Debug print difference vectors
     dtostrf(currLat - latitude, 6, 15, latitudeStr);
-    dtostrf(currLong - longitude, 6, 15, longitudeStr);
+    dtostrf(currLong - longitude, 6, 15, longitudeStr);    
     Serial.print("Lat/Long: "); Serial.print(latitudeStr); Serial.print("/"); Serial.println(longitudeStr);
 
     // Return heading
@@ -528,6 +483,7 @@ void setupServer(void) {
   });
 
   server.on("/pattern", HTTP_POST, []() {
+    enableLoop = false;
     hasNotification = false;
     String value = server.arg("value");
     setPattern(value.toInt());
@@ -604,7 +560,7 @@ void setupServer(void) {
     adjustBrightness(false);
     sendBrightness();
   });
-
+    
   server.serveStatic("/index.htm", SPIFFS, "/index.htm");
   server.serveStatic("/index.html", SPIFFS, "/index.htm");
   server.serveStatic("/", SPIFFS, "/index.htm");
@@ -612,7 +568,7 @@ void setupServer(void) {
   server.serveStatic("/fonts", SPIFFS, "/fonts", "max-age=86400");
   server.serveStatic("/js", SPIFFS, "/js");
   server.serveStatic("/css", SPIFFS, "/css", "max-age=86400");
-  server.serveStatic("/images", SPIFFS, "/images", "max-age=86400");
+  server.serveStatic("/images", SPIFFS, "/images", "max-age=86400");  
 
   server.begin();
 
