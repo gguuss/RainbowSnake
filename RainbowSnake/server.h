@@ -132,6 +132,7 @@ typedef PatternAndName PatternAndNameList[];
 
 // List of patterns to cycle through.  Each is defined as a separate function below.
 PatternAndNameList patterns = {
+  { pride, "Pride" },
   { adaLoop, "Adafruit Color Loop" },
   { rainbowLove, "Rainbow Cylon" },
   { rainbow, "Rainbow" },
