@@ -34,3 +34,8 @@ Storing Waypoint using phone GPS and presenting distance to waypoint
 Resizing the strip size for control of large LED arrays
 
 [![Control Large LED arrays](https://img.youtube.com/vi/dDma-7SCzwo/0.jpg)](https://www.youtube.com/watch?v=dDma-7SCzwo "Control Large LED arrays")
+
+# Roadmap
+* Add support for ESP32
+* Add BLE mesh
+* Improve web
