@@ -39,3 +39,6 @@ Resizing the strip size for control of large LED arrays
 * Add support for ESP32
 * Add BLE mesh
 * Improve web
+
+# See also
+* [Scratch](https://github.com/gguuss/scratch)
