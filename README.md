@@ -40,6 +40,7 @@ Resizing the strip size for control of large LED arrays
   * Dedicate core to drawing vs to networking?
 * Add BLE mesh
 * Improve web
+* More patterns
 
 # See also
 * [Scratch](https://github.com/gguuss/scratch)
