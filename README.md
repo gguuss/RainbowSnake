@@ -1,5 +1,5 @@
 # RainbowSnake
-LED Server with One-button interface, device-to-device mesh, and mobile phone sensor bridge.
+LED Server with One-button interface, device-to-device mesh using AP-AP networks, and mobile phone sensor bridge.
 
 # Quickstart
 * See `config.h` for pin settings and board configurations.
