@@ -5,11 +5,11 @@
 
 #include <ESP8266WiFi.h>
 String manageRequest(String request);
-#include <Adafruit_NeoPixel.h>
+//#include <Adafruit_NeoPixel.h>
 #include <Adafruit_DotStar.h>
 
-#define FASTLED_FORCE_SOFTWARE_SPI
-#define FASTLED_FORCE_SOFTWARE_PINS
+//#define FASTLED_FORCE_SOFTWARE_SPI
+//#define FASTLED_FORCE_SOFTWARE_PINS
 #include <FastLED.h>
 #include "config.h"
 
@@ -96,7 +96,7 @@ void setup() {
   if (true || mode == 0 || mode > numFastModes) { 
     mode = notFast ? VEE_YOU : NARWHAL;
   }
-  //mode = numButtonClickerModes;
+  mode = numButtonClickerModes;
 
   // for testing notification
   //hasNotification = true;
@@ -230,7 +230,7 @@ void loop() {
       nextmode = NARWHAL;
       break;
     case NARWHAL:
-      narwhal();
+      //narwhal();
       nextmode = PRIDE;
       break;
     case PRIDE:

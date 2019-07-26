@@ -103,11 +103,11 @@ uint32_t color = 0xFF0000;      // 'On' color (starts red)
 // Settings correspond to WeMos/1Button
 #ifdef SETTINGS_WEMOS
 #define MODE_PIN   D3  // mode select pin connected to ground
-#define NUMPIXELS  25 // Number of LEDs in strip
-#define DATAPIN    D6
-#define CLOCKPIN   D7
+#define NUMPIXELS  10 // Number of LEDs in strip
+#define DATAPIN    D7
+#define CLOCKPIN   D6
 #define SYSDELAY   50
-#define NOMODESWITCH
+//#define NOMODESWITCH
 Adafruit_DotStar strip = Adafruit_DotStar(
                            NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_BGR);
 #endif
@@ -178,7 +178,7 @@ Adafruit_DotStar strip = Adafruit_DotStar(
 // These settings correspond to the Ardino ADK
 #ifdef SETTINGS_ADK
 #define MODE_PIN   3 // mode select pin connected to ground
-#define NUMPIXELS  12 // Number of LEDs in strip
+#define NUMPIXELS  60 // Number of LEDs in strip
 #define DATAPIN    11
 #define CLOCKPIN   12
 #define SYSDELAY   50
