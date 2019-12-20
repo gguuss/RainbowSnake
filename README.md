@@ -7,7 +7,7 @@ LED Server with One-button interface, device-to-device mesh using AP-AP networks
 * Install data folder using [ESP8266 FS tool](https://github.com/esp8266/Arduino/blob/master/doc/filesystem.rst)
   * Note that you should be using 3M SPIFFS, the files are bloaty.
 * Upload sketch and wait for board to come up.
-* Connect to `Rainbow Snake` AP, server [192.168.4.1](http://192.168.4.1).
+* Connect to `Rainbow Snake` AP, server [192.168.4.1](http://192.168.4.1/index.htm).
 
 # Notes
 The ESP8266 is terrible at serving multiple files so the app is optimized as such
